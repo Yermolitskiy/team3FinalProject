@@ -4,9 +4,12 @@
       <slot name="header">Header</slot>
     </div>
 
-    //TODO::style errors
     <div v-if="validationErrors.length" class="errorMsg">
-        <ul v-for="(validationError , i) in validationErrors" :key="'error'+i" >{{validationError}}</ul>
+        <ul  >
+          <li v-for="(validationError , i) in validationErrors" :key="'error'+i" class="error">
+            {{validationError}}
+          </li>
+        </ul>
     </div>
 
     <div
@@ -14,7 +17,7 @@
       class="form_wrapper"
     >
       <input
-        v-model="InputValues.register.name"
+        v-model="inputValues.register.name"
         placeholder="name"
         name="name"
         id="name"
@@ -80,13 +83,13 @@
 
       <input
         class="postTitle"
-        v-model="inputValues.post.title"
+        v-model="inputValues.postForm.title"
         name="title"
         placeholder="title"
         id="title"
       />
       <textarea
-        v-model="inputValues.post.postBody"
+        v-model="inputValues.postForm.postBody"
         placeholder="text"
         name="postBody"
         id="postBody"
@@ -135,7 +138,7 @@ export default {
           email: "",
           password: "",
           },
-        post:{
+        postForm:{
           postBody: "",
           title: "",
         }
@@ -157,10 +160,12 @@ export default {
     submit() {
       //TODO::add form validation
 
-      const errors = validator(this.inputValues , this.formType)
+      const errors = validator(this.inputValues[this.formType] , this.formType)
 
-      if(!errors.length)
+      if(!errors.length){
+        this.validationErrors = []
         this.$emit('onSubmit' , this.inputValues[this.formType] )
+        }
       else 
         this.validationErrors = errors
     },
@@ -176,6 +181,10 @@ export default {
     min-width: 20rem;
     max-width: 30rem;
     min-height: 7rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .form_header {
@@ -247,12 +256,19 @@ input {
 }
 
 .errorMsg{
-
-    height:3rem;
-    width:80%;
+    width:20rem;
     display: flex;
+    margin:10px 0 10px 0;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     background-color: rgb(235, 117, 117);
 }
+.error  {
+  margin: 5px 0 0 5px;
+  font-size: .8rem;
+  text-align: left;
+   list-style-type:circle;
+}
+
 </style>
