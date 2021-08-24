@@ -14,39 +14,39 @@
       class="form_wrapper"
     >
       <input
-        v-model="registerInputValues.name"
+        v-model="InputValues.register.name"
         placeholder="name"
         name="name"
         id="name"
       />
       <input
-        v-model="registerInputValues.surname"
+        v-model="inputValues.register.surname"
         placeholder="surname"
         name="surname"
         id="surname"
       />
       <input
-        v-model="registerInputValues.email"
+        v-model="inputValues.register.email"
         placeholder="email"
         name="email"
         id="email"
       />
       <input
-        v-model="registerInputValues.age"
+        v-model="inputValues.register.age"
         type="number"
         placeholder="age"
         name="age"
         id="age"
       />
       <input
-        v-model="registerInputValues.password"
+        v-model="inputValues.register.password"
         type="password"
         placeholder="password"
         name="password"
         id="password"
       />
       <input
-        v-model="registerInputValues.password_confirm"
+        v-model="inputValues.register.password_confirm"
         type="password"
         name="password_confirm"
         placeholder="confirm password"
@@ -57,13 +57,13 @@
     <div v-else-if="formType === 'login'" class="form_wrapper">
         
       <input
-        v-model="loginInputValues.email"
+        v-model="inputValues.login.email"
         name="email"
         placeholder="email"
         id="email"
       />
       <input
-        v-model="loginInputValues.password"
+        v-model="inputValues.login.password"
         type="password"
         placeholder="password"
         name="password"
@@ -80,13 +80,13 @@
 
       <input
         class="postTitle"
-        v-model="postInputValues.title"
+        v-model="inputValues.post.title"
         name="title"
         placeholder="title"
         id="title"
       />
       <textarea
-        v-model="postInputValues.postBody"
+        v-model="inputValues.post.postBody"
         placeholder="text"
         name="postBody"
         id="postBody"
@@ -122,22 +122,25 @@ export default {
   name: "custom-form",
   data() {
     return {
-      registerInputValues: {
-        name: "",
-        surname: "",
-        email: "",
-        password: "",
-        password_confirm: "",
-        age: "",
+      inputValues:{
+        register: {
+          name: "",
+          surname: "",
+          email: "",
+          password: "",
+          password_confirm: "",
+          age: "",
+          },
+        login:{
+          email: "",
+          password: "",
+          },
+        post:{
+          postBody: "",
+          title: "",
+        }
       },
-      loginInputValues:{
-        email: "",
-        password: "",
-      },
-      postInputValues:{
-        postBody: "",
-        title: "",
-      },
+     
 
       validationErrors:[]
     };
@@ -153,45 +156,13 @@ export default {
   methods: {
     submit() {
       //TODO::add form validation
-    switch (this.formType) {
-        case 'register':
-            {
-                
-            const errors = validator(this.registerInputValues , this.formType)
 
-            if(!errors.length)
-                this.$emit( "onSubmit", this.registerInputValues )
-            else
-                this.validationErrors = errors
-                   
-            
-            break;
-            }
-        case 'login':
-            {
-            const errors = validator(this.loginInputValues , this.formType)
+      const errors = validator(this.inputValues , this.formType)
 
-            if(!errors.length)
-                   this.$emit( "onSubmit", this.loginInputValues );
-            else
-                this.validationErrors = errors
-
-            break;}
-        case 'postForm':
-            {const errors = validator(this.postInputValues , this.formType)
-
-            if(!errors.length)
-                   this.$emit( "onSubmit", this.postInputValues );
-            else
-                this.validationErrors = errors
-
-            break;}
-    
-        default:
-            break;
-    }
-
-   
+      if(!errors.length)
+        this.$emit('onSubmit' , this.inputValues[this.formType] )
+      else 
+        this.validationErrors = errors
     },
   },
 };
