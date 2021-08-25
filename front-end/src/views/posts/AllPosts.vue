@@ -1,16 +1,25 @@
 <template>
     <div>
-        <div class="article_list">
-            <article-card v-for="article in dummyArticles" :author="article.author"
-                :body="article.body" :title="article.title" :date="article.date" :key="'article-'+article.id" />
+        <div class="article_list" v-if="!loading">
+            <article-card v-for="article in articleData" 
+                :body="article.body" :title="article.title" 
+                :key="'article-'+article.id" />
+        </div>
+        <div class="loader" v-if="loading">
+            ...Loading
         </div>
     </div>
 </template>
 
 <script>
 
+    import {mapActions, mapState} from 'vuex'
+    // import {actionsIds} from '@/store/postModule/actions'
+    import {actionsIds} from '../../store/postModule/actions'
+
     export default {
         data(){
+            
             return{
                 dummyArticles:[
                     {id:1 , author:'John Doe' , title:'Some title 1' , body:'Literature admiration frequently indulgence announcing are who you her. Was least quick after six. So it yourself repeated together cheerful. Neither it cordial so painful picture studied if. Sex him position doubtful resolved boy expenses. Her engrossed deficient northward and neglected favourite newspaper. But use peculiar produced concerns ten. ' , date:'20.11.2021'},
@@ -21,7 +30,22 @@
                     {id:6 , author:'Josh Bush' , title:'Some title 6' , body:'Eagerness it delighted pronounce repulsive furniture no. Excuse few the remain highly feebly add people manner say. It high at my mind by roof. No wonder worthy in dinner. ' , date:'14.03.2021'}
                 ]
             }
+        },
+        methods:{
+          ...mapActions({
+              fetchPosts: 'post/' + actionsIds.FETCH_POSTS
+          })
+        },
+        computed:{
+            ...mapState({
+                articleData: state => state.post.posts,
+                loading: state => state.post.postsLoading
+            })
+        },
+        mounted(){
+            this.fetchPosts()
         }
+    
     }
 </script>
 

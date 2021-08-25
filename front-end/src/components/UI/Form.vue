@@ -187,6 +187,18 @@ export default {
     align-items: center;
   }
 
+   textarea {
+    resize: none;
+    min-width: 18.5rem;
+    border: 1px solid rgba(91, 121, 240, 0.3);
+  }
+
+  input {
+  border: 1px solid rgba(91, 121, 240, 0.3);
+  min-height: 1.4rem;
+  max-height: 3rem;
+}
+
   .form_header {
     margin: 10px 0 10px 0;
     color: rgb(41, 62, 148);
@@ -194,11 +206,7 @@ export default {
     font-size: 20px;
   }
 
-  textarea {
-    resize: none;
-    min-width: 18.5rem;
-    border: 1px solid rgba(91, 121, 240, 0.3);
-  }
+ 
   .postButton {
     margin: 20px 0 10px 0;
   }
@@ -218,11 +226,7 @@ export default {
   font-weight: 400;
 }
 
-input {
-  border: 1px solid rgba(91, 121, 240, 0.3);
-  min-height: 1.4rem;
-  max-height: 3rem;
-}
+
 
 @media only screen and (min-width: 768px) {
   form {

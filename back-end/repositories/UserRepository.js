@@ -3,8 +3,11 @@ const MySQLStorage = require('../storages/MySQL/')
 
 class UserRepository { 
 
-    async find(options){
+    storage = new MySQLStorage({table:'users'})
 
+    async find(criteria){
+        const userData = await this.storage.findBy(criteria)
+        return userData
     }
 
     async getAll(){
@@ -12,7 +15,7 @@ class UserRepository {
     }
 
     //for profile edit
-    async update(options){
+    async update(id , data){
 
     }
     
@@ -20,7 +23,8 @@ class UserRepository {
 
     }
     async create(data){
-
+        const userData = await this.storage.create(data)
+        return userData
     }
 
 }

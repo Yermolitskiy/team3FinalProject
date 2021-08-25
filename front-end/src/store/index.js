@@ -1,8 +1,11 @@
 import { createStore } from 'vuex'
-import { authModule } from './authModule'
+import { authModule } from './authModule/'
+import { postModule } from './postModule'
 
 export default createStore({
-  nodules:{
-    auth:authModule
+  strict:true,
+  modules:{
+    auth:authModule,
+    post:postModule
   }
 })

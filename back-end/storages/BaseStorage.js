@@ -4,7 +4,7 @@ class BaseStorage {
         console.error(`${this.constructor.name} Missing implimantation for find`)
         throw new Error(`${this.constructor.name} Missing implimantation for find`)
     }
-    findAll(){
+    findAll(selector){
         console.error(`${this.constructor.name} Missing implimantation for findAll`)
         throw new Error(`${this.constructor.name} Missing implimantation for findAll`)
     }

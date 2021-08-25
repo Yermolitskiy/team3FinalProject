@@ -1,7 +1,13 @@
 class User { 
 
 
-    //set neccesary structure for user model
+    constructor(data){
+        this.name = data.name
+        this.surname = data.surname
+        this.email = data.email
+        // password
+        this.age = data.age
+    }
 
 }
 

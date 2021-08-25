@@ -1,4 +1,7 @@
 const PostRepository = require('../repositories/PostRepository')
+const addMetaData = require('../utils/meta/postMeta')
+
+
 class PostController {
 
 
@@ -8,10 +11,17 @@ class PostController {
         try {
             if(id){
                 const post = await PostRepository.getBy({id})
-                return res.status(200).json(post)
+                return res.status(200).json(addMetaData(req,res,post))
             }
-            const posts = await PostRepository.getAll()
-            return res.status(200).json(posts)
+
+            const queryOptions = {}
+            // if(req.query.filter) queryOptions['filter'] = req.query.filter
+            if(req.query.order)  queryOptions['order'] = req.query.order
+                
+            const posts = await PostRepository.getAll(queryOptions)
+           
+          
+            return res.status(200).json(addMetaData(req,res,posts))
             
         } catch (error) {
             console.log(error)

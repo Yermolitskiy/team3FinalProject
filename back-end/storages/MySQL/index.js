@@ -13,10 +13,16 @@ module.exports = class MySQLStorage extends BaseStorage{
             const keys = Object.keys(criteria)
 
             //this literal template puts all key/value pairs in one query whether single option or multiple options are passed
-            const query = `SELECT * FROM ${this._table} WHERE ${keys.length > 1 ? `${keys.flatMap(key => ` ${key} = ${criteria[key]} `).join(' AND ')} ` 
-            : `${keys[0]} = ${criteria[keys[0]]}` }`
+            const query = `SELECT * FROM ${this._table} WHERE ${keys.length > 1 ? `${keys.flatMap(key => ` \`${key}\` = \` ${criteria[key]}\` `).join(' AND ')} ` 
+                        : ` \`${keys[0]}\` = '${criteria[keys[0]]}' ` }`
+
+         
 
             const [rows] = await connectionPool.promise().execute(query)
+
+            if(!rows.length){
+                return false
+            }
 
             if(rows.length == 1){
                 const postData = Object.assign({} , rows[0])
@@ -32,9 +38,10 @@ module.exports = class MySQLStorage extends BaseStorage{
         }
     }
 
-    async findAll(){
+    async findAll(queryOptions){
         try {
-            const [rows] = await connectionPool.promise().execute(`SELECT * FROM ${this._table}`)
+            const [rows] = await connectionPool.promise()
+                .execute(`SELECT * FROM ${this._table} ${queryOptions.order ? ` ORDER BY ${queryOptions.order}` : ''}`)
             const postsData = rows.map(row => Object.assign({} , row))
             return postsData
         } catch (error) {

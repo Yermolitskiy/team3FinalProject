@@ -35,17 +35,26 @@ const routes = [
     path:'/myPosts',
     name:'myPosts',
     component:MyPosts,
+    meta:{
+      requiresAuth:true
+    }
    
   },
   {
     path:'/register',
     name:'registration',
-    component:Registration
+    component:Registration,
+    meta:{
+      quest:true
+    }
   },
   {
     path:'/login',
     name:'login',
-    component:Login
+    component:Login,
+    meta:{
+      quest:true
+    }
   },{
     path:'/:catchAll(.*)*',
     name:'404',
@@ -60,3 +69,32 @@ const router = createRouter({
 })
 
 export default router
+
+router.beforeEach((to , from , next) => {
+
+  if(to.matched.some(route => route.meta.quest)){
+
+    if(localStorage.getItem('token') == null){
+      next()
+    }else{
+      next('/')
+    }
+  }
+  else if(to.matched.some(route => route.meta.requiresAuth)) {
+   
+      if(localStorage.getItem('token') !== null ){
+        next()
+      }else{
+        next('/')
+      }
+
+  }
+  else{
+    next()
+  }
+
+  
+
+
+
+})
