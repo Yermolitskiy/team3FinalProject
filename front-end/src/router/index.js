@@ -9,6 +9,9 @@ import Error404Page from '../views/404.vue'
 import Registration from '../views/auth/Registration.vue'
 import Login from '../views/auth/Login.vue'
 
+import userState from '../store/authModule/state'
+
+
 const routes = [
   
   {
@@ -71,6 +74,8 @@ const router = createRouter({
 export default router
 
 router.beforeEach((to , from , next) => {
+
+  console.log('user is logged?' , userState.isLogged)
 
   if(to.matched.some(route => route.meta.quest)){
 

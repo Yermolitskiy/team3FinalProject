@@ -3,6 +3,7 @@ const {hash , compare} = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const UserRepository = require('../repositories/UserRepository')
 const UserModel = require('../models/User')
+const validateToken = require('../utils/token/validateToken')
 
 class UserService{
 
@@ -53,7 +54,15 @@ class UserService{
      
     }
 
-    
+    //experimental
+    async tokenResolve(token){
+        const validatedToken = validateToken(token)
+        if(!validatedToken) throw new Error('Invalid token')
+        const userData = await UserRepository.find({id:validatedToken.userId})
+        return userData
+    }
+
+
     async logout(){
     //logout logic implementation
     //Not sure if it neccessary if authentication will be done only under jwt access token implementation ,

@@ -1,7 +1,9 @@
 <template>
     <div>
-
-          <custom-form @onSubmit="handleRegister" :formType="'register'">
+         <div v-if="error">
+            {{error}}
+        </div>
+          <custom-form @onSubmit="register" :formType="'register'">
             <template #header>
                 Registration
             </template>
@@ -14,11 +16,31 @@
 </template>
 
 <script>
+import { mapActions ,  mapMutations, mapState  } from 'vuex'
+import {authMutationsIds} from '../../store/authModule/mutations'
+// import {authMutationsIds} from '@store/authModule/mutations'
     export default {
         methods:{
-            handleRegister(data){
+            register(data){
                 console.log(data)
-            }
+                //we don't want to send password confirm because in db there is no such field
+                delete data['password_confirm']
+                this.handleRegister(data)
+                if(!this.error){
+                    this.$router.replace('/')
+               }
+            },
+
+            ...mapMutations({setError:'auth/'+authMutationsIds.SET_ERROR}),
+            ...mapActions({
+                handleRegister:'auth/register'
+            })
+        },
+        mounted(){this.setError(' ')},
+        computed:{
+             ...mapState({
+                 error: state => state.auth.error
+             }),
         }
         
     }

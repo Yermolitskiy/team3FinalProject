@@ -1,17 +1,41 @@
 <template>
   <div>
-    <div id="nav">
+    <div id="nav" v-if="$store.state.auth.isLogged">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
       <router-link to="/allPosts">All Posts</router-link>
       <router-link to="/myPosts">My Posts</router-link>
       <router-link to="/createPost">Create Post</router-link>
-      <router-link to="/register">Registration</router-link>
+      <button @click="logout"> Sign out </button>
+     
+    </div>
+    <div id="nav" v-else>
+      <router-link to="/">Home</router-link> |
+       <router-link to="/register">Registration</router-link>
       <router-link to="/login">Login</router-link>
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+import { mapActions } from 'vuex'
+
+export default {
+  methods:{
+    ...mapActions({loadUser:'auth/loadUser' , handleLogout:'auth/logout'}),
+    logout(){
+      this.handleLogout()
+      this.$router.replace('/login')
+    }
+  },
+
+  beforeMount(){
+    this.loadUser()
+  }
+}
+
+</script>
 
 <style>
 #app {

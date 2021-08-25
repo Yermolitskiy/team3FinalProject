@@ -1,6 +1,10 @@
 <template>
     <div>
-        <custom-form @onSubmit="handleLogin" :formType="'login'">
+
+        <div v-if="error">
+            {{error}}
+        </div>
+        <custom-form @onSubmit="login" :formType="'login'">
             <template #header>
                 Login
             </template>
@@ -12,11 +16,28 @@
 </template>
 
 <script>
+import { mapActions, mapMutations, mapState } from 'vuex'
+import {authMutationsIds} from '../../store/authModule/mutations'
+// import {authMutationsIds} from '@store/authModule/mutations'
     export default {
         methods:{
-            handleLogin(data){
-                console.log(data)
-            }
+           ...mapActions({
+               handleLogin:'auth/login'
+           }),
+           ...mapMutations({setError:'auth/'+authMutationsIds.SET_ERROR}),
+           login(data){
+               this.handleLogin(data)
+
+               if(!this.error){
+                   this.$router.replace('/myPosts')
+               }
+           }
+        },
+        mounted(){this.setError(' ')},
+        computed:{
+             ...mapState({
+                 error: state => state.auth.error
+             }),
         }
     }
 </script>
