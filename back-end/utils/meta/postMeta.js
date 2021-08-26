@@ -1,13 +1,13 @@
 
-function addPostMeta (req, res, initialData) {
-    let data;
+function addPostMeta (req, res, initialPosts) {
+    let posts;
     const meta = {}
 
     const {query , baseUrl} = req
     const offset = Number(query.offset) || 0
     const limit = Number(query.limit) || 10
     
-    //filter meta data
+    //filter meta posts
     meta.filter = {}
     meta.filter.author = `${process.env.API_URL}${baseUrl}?offset=${offset}&limit=${limit}&filter=author`
     meta.filter.publicationDate =  `${process.env.API_URL}${baseUrl}?offset=${offset}&limit=${limit}&filter=publicationDate` 
@@ -18,12 +18,12 @@ function addPostMeta (req, res, initialData) {
    
 
 
-    const isList = Array.isArray(initialData)
+    const isList = Array.isArray(initialPosts)
 
     if(isList){
         meta.single_post = `${process.env.API_URL}${baseUrl}/:id`
 
-        if(initialData.length > limit){
+        if(initialPosts.length > limit){
             meta.links = {}
 
             if(offset > 0 ){
@@ -33,26 +33,26 @@ function addPostMeta (req, res, initialData) {
             
             }
             
-            if(initialData.length > offset + limit){
+            if(initialPosts.length > offset + limit){
                 meta.links.next = `${process.env.API_URL}${baseUrl}?offset=${offset + limit}&limit=${limit}`
 
-                const lastPossibleOffset = Math.floor((initialData.length - 1) / limit) * limit
+                const lastPossibleOffset = Math.floor((initialPosts.length - 1) / limit) * limit
                 meta.links.last = `${process.env.API_URL}${baseUrl}?offset=${lastPossibleOffset}&limit=${limit}`
             }
 
-            data = initialData.slice(offset , offset + limit)
+            posts = initialPosts.slice(offset , offset + limit)
 
-            res.setHeader('x-total-count' , initialData.length)
+            res.setHeader('x-total-count' , initialPosts.length)
 
 
         }else{
-            data = initialData
+            posts = initialPosts
 
             meta.list_entries = `${process.env.API_URL}${baseUrl.replace(/\/\d+$/ , '')}`
         }
 
         return {
-            data,meta
+            posts,meta
         }
     }
 

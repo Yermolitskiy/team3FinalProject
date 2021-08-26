@@ -25,10 +25,12 @@ import {authMutationsIds} from '../../store/authModule/mutations'
                 console.log(data)
                 //we don't want to send password confirm because in db there is no such field
                 delete data['password_confirm']
-                this.handleRegister(data)
-                if(!this.error){
-                    this.$router.replace('/')
-               }
+                
+                this.handleRegister(data).then(() => {
+                    if(!this.error){
+                        this.$router.replace('/')
+                   }
+                })
             },
 
             ...mapMutations({setError:'auth/'+authMutationsIds.SET_ERROR}),
@@ -36,7 +38,7 @@ import {authMutationsIds} from '../../store/authModule/mutations'
                 handleRegister:'auth/register'
             })
         },
-        mounted(){this.setError(' ')},
+        mounted(){this.setError(null)},
         computed:{
              ...mapState({
                  error: state => state.auth.error

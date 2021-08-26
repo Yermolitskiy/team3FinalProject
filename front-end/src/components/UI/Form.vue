@@ -89,10 +89,10 @@
         id="title"
       />
       <textarea
-        v-model="inputValues.postForm.postBody"
+        v-model="inputValues.postForm.body"
         placeholder="text"
-        name="postBody"
-        id="postBody"
+        name="body"
+        id="body"
         cols="30"
         rows="10"
       ></textarea>
@@ -139,7 +139,7 @@ export default {
           password: "",
           },
         postForm:{
-          postBody: "",
+          body: "",
           title: "",
         }
       },

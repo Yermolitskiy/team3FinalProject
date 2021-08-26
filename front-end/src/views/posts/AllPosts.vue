@@ -3,6 +3,8 @@
         <div class="article_list" v-if="!loading">
             <article-card v-for="article in articleData" 
                 :body="article.body" :title="article.title" 
+                :author="article.author"
+                :date="article.date"
                 :key="'article-'+article.id" />
         </div>
         <div class="loader" v-if="loading">

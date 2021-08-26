@@ -1,7 +1,9 @@
 
-export const mutationsIds = {
+export const postMutationsIds = {
     SET_POSTS : 'setPosts',
-    SET_LOADING : 'setLoading'
+    SET_LOADING : 'setLoading',
+    SET_ERROR : 'setError' ,
+    SET_META : 'setMeta'
 }
 
 const mutations = {
@@ -10,6 +12,12 @@ const mutations = {
     },
     setLoading(state,bool){
         state.postsLoading = bool
+    },
+    setError(state,error){
+        state.error = error
+    },
+    setMeta(state , meta){
+        state.meta = meta
     }
 }
 

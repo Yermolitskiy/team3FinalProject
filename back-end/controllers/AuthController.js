@@ -34,11 +34,16 @@ class AuthController {
 
     //experimental
     async tokenResolve(req,res){
-        const {token} = req.body
-        if(!token) throw new Error('No token provided')
-        const userData = await UserService.tokenResolve(token)
-        delete userData['password']
-        return res.status(200).json(userData)
+        try {
+            const {token} = req.body
+            if(!token) throw new Error('No token provided')
+            const userData = await UserService.tokenResolve(token)
+            delete userData['password']
+            return res.status(200).json(userData)
+        } catch (error) {
+            return res.status(400).json({error : error.message})
+        }
+     
     }
 
 }

@@ -16,8 +16,16 @@ class PostRepository {
     }
     
     async create(data){
-        await this.storage.create(data)
-        return new PostModel(data)
+        try {
+            const createdId = await this.storage.create(data)
+
+            if(!createdId) throw new Error('Error creating new post')
+
+            const post = await this.storage.findBy({id:createdId})
+            return new PostModel(post)
+        } catch (error) {
+            throw new Error('Error creating new post')
+        }
     }
     async update(id , data){
         await this.storage.update({id , data})

@@ -6,8 +6,11 @@ export const postModule = {
     
     state:() =>({
         posts:[],
-        postsLoading:false
+        postsLoading:false,
+        error:undefined,
+        meta:{}
     }),
+
     mutations,
     actions,
     namespaced:true

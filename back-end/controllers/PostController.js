@@ -7,13 +7,15 @@ class PostController {
 
     async getPost(req, res){
     
+    
         const {id} = req.params
         try {
             if(id){
                 const post = await PostRepository.getBy({id})
                 return res.status(200).json(addMetaData(req,res,post))
             }
-
+            
+            
             const queryOptions = {}
             // if(req.query.filter) queryOptions['filter'] = req.query.filter
             if(req.query.order)  queryOptions['order'] = req.query.order
@@ -40,15 +42,15 @@ class PostController {
             return res.status(404).json(error)
         }
     }
-
     async createPost(req,res){
         try {
             const data = req.body
             const post = await PostRepository.create(data)
             return res.status(201).json(post)
+            
         } catch (error) {
             console.log(error)
-            return res.status(404).json(error)
+            return res.status(400).json({error:error.message})
         }
     }
 

@@ -27,13 +27,16 @@ import {authMutationsIds} from '../../store/authModule/mutations'
            ...mapMutations({setError:'auth/'+authMutationsIds.SET_ERROR}),
            login(data){
                this.handleLogin(data)
+                .then(() => {
+                    if(!this.error){
+                        this.$router.replace('/')
+                        }
+                })
 
-               if(!this.error){
-                   this.$router.replace('/myPosts')
-               }
+              
            }
         },
-        mounted(){this.setError(' ')},
+        mounted(){this.setError(null)},
         computed:{
              ...mapState({
                  error: state => state.auth.error

@@ -3,7 +3,7 @@ const state = {
     isLogged:false,
     user:{},
     userLoading:false,
-    error:' '
+    error:undefined
 }
 
 export default state

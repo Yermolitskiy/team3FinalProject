@@ -1,6 +1,6 @@
 <template>
     <div>
-        <custom-form @onSubmit="test" formType="postForm">
+        <custom-form @onSubmit="createPost" formType="postForm">
             <template #header>
                 New Post
             </template>
@@ -15,11 +15,14 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import { actionsIds } from '../../store/postModule/actions'
     export default {
         methods:{
-            test(data){
-                console.log(data)
-            }
+            createPost(data){
+                this.handleCreatePost({data})
+            },
+            ...mapActions({handleCreatePost : 'post/' + actionsIds.CREATE_POST})
         }
     }
 </script>

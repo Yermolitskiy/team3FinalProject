@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/authMiddleware')
 
 router.get('/:id?' , PostController.getPost)
 router.get('/userPosts', authMiddleware , PostController.getUserPosts)
-router.post('/' , PostController.createPost)
+router.post('/' , authMiddleware , PostController.createPost)
 
 router.route('/:id')
     .put(PostController.updatePost)

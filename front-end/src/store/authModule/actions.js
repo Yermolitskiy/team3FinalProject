@@ -7,11 +7,15 @@ const actions = {
         try {
             // console.log(process.env.VUE_APP_API_URL)
             commit(authMutationsIds.SET_LOADING , true)
+            commit(authMutationsIds.SET_ERROR , null)
+
             const response = await axios.post(`/api/auth/register` , data)
-            commit(authMutationsIds.SET_USER , response.data.user)
+
             localStorage.setItem('token' , response.data.token)
             localStorage.setItem('user' , JSON.stringify(response.data.user))
-            commit(authMutationsIds.SET_ERROR , null)
+            
+            commit(authMutationsIds.SET_USER , response.data.user)
+            commit(authMutationsIds.SET_LOGGED , true)
         } catch (error) {
             commit(authMutationsIds.SET_ERROR, error.response.data.error)
         }finally{
@@ -43,6 +47,7 @@ const actions = {
         try {
             // commit(authMutationsIds.SET_ERROR  , null)
             commit(authMutationsIds.SET_LOADING ,true)
+            commit(authMutationsIds.SET_ERROR, null)
             const response = await axios.post(`/api/auth/login`,data)
             localStorage.setItem('token' , response.data.token)
             localStorage.setItem('user' , JSON.stringify(response.data.user))
