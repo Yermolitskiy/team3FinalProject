@@ -1,3 +1,6 @@
+
+// form better to be refactored later
+//prop1 form types (formTypes) - 1.login 2.register 3.postForm
 <template>
   <form>
     <div class="form_header">
@@ -154,6 +157,17 @@ export default {
       type: String,
       default: undefined,
     },
+    initialData:{
+      type:Object,
+      default:undefined
+    }
+  },
+
+  mounted(){
+    console.log(this.initialData)
+    if(this.initialData){
+      this.inputValues[this.formType] = this.initialData
+    }
   },
 
   methods: {
@@ -165,7 +179,7 @@ export default {
       if(!errors.length){
         this.validationErrors = []
         this.$emit('onSubmit' , this.inputValues[this.formType] )
-        }
+          }
       else 
         this.validationErrors = errors
     },

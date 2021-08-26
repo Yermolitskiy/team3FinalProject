@@ -8,7 +8,12 @@ class PostRepository {
 
     async getBy(criteria){
         const postData = await this.storage.findBy(criteria)
-        return new PostModel(postData)
+
+        if(Array.isArray(postData)){
+            return postData.map(post => new PostModel(post))
+        }else{
+            return new PostModel(postData)
+        }
     }
     async getAll(queryOptions){
         const postsData = await this.storage.findAll(queryOptions)

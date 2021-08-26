@@ -4,7 +4,7 @@ import About from '../views/About.vue'
 import AllPosts from '../views/posts/AllPosts.vue'
 import CreatePost from '../views/posts/CreatePost.vue'
 import MyPosts from '../views/posts/MyPosts.vue'
-// import Post from '../views/posts/Post.vue'
+import Post from '../views/posts/Post.vue'
 import Error404Page from '../views/404.vue'
 import Registration from '../views/auth/Registration.vue'
 import Login from '../views/auth/Login.vue'
@@ -38,6 +38,21 @@ const routes = [
     path:'/myPosts',
     name:'myPosts',
     component:MyPosts,
+    children:[
+      {
+        path:':id',
+        component:Post,
+        name:'myPost',
+        children:[
+          {
+            path:'edit',
+            component:Post,
+            name:'editPost'
+          }
+
+        ]
+      }
+    ],
     meta:{
       requiresAuth:true
     }

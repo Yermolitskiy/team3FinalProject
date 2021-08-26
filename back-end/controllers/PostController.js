@@ -21,6 +21,8 @@ class PostController {
             if(req.query.order)  queryOptions['order'] = req.query.order
                 
             const posts = await PostRepository.getAll(queryOptions)
+
+            
            
           
             return res.status(200).json(addMetaData(req,res,posts))
@@ -33,10 +35,24 @@ class PostController {
 
     async getUserPosts(req , res){
         try {
-            //other way is by email of user
-            const {id} = req.user
-            const posts = await PostRepository.getById(id)
-            return res.status(200).json(posts)
+            
+            const {id} = req.params
+            const {userId} = req.user
+
+            if(id){
+                const post = await PostRepository.getBy({id , author:userId})
+                //when not author tries to access specific post
+        
+                if(!post.id){
+                    return res.status(400).json('Forbidden')
+                }
+                console.log(post)
+                return res.status(200).json(post)
+            }else{
+                const posts = await PostRepository.getBy({author:userId})
+                return res.status(200).json(posts)
+            }
+       
         } catch (error) {
             console.log(error)
             return res.status(404).json(error)
@@ -45,7 +61,8 @@ class PostController {
     async createPost(req,res){
         try {
             const data = req.body
-            const post = await PostRepository.create(data)
+            const {id} = req.user
+            const post = await PostRepository.create({...data , author:id})
             return res.status(201).json(post)
             
         } catch (error) {
@@ -70,10 +87,17 @@ class PostController {
     async removePost(req,res){
         try {
             const {id} = req.params
-            // const {id} = req.body
+            const {userId} = req.user
+            const post = await PostRepository.getBy({id , author:userId})
+                //when not author tries to access specific post
+        
+            if(!post.id){
+                    return res.status(400).json('Forbidden')
+                }
+
             await PostRepository.removeById(id)
             //responsing with only status for some reason doesn't return response
-            return res.status(200).send('OK')
+            return res.status(200).json('Successfuly deleted')
         } catch (error) {
             console.log(error)
             return res.status(404).json(error)

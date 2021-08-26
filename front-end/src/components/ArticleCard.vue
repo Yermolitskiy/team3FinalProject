@@ -68,7 +68,7 @@
     }
 </script>
 
-<style  scoped>
+<style  >
 
 
 @media only screen and (min-width:325px){

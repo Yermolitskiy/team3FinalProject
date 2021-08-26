@@ -20,7 +20,7 @@ module.exports = class MySQLStorage extends BaseStorage{
             //seperate query for post because it needs extra join and concat clauses to swap numeric id with user name and surname
             const innerJoinPostsQuery = `SELECT CONCAT(name , " " , surname) as author , posts.id , posts.body , posts.title , posts.publicationDate FROM posts 
                     INNER JOIN users ON posts.author = users.id 
-                    WHERE ${keys.length > 1 ? `${keys.flatMap(key => ` \`posts.${key}\` = \` ${criteria[key]} \` `).join(' AND ')}` 
+                    WHERE ${keys.length > 1 ? `${keys.flatMap(key => ` posts.${key} = '${criteria[key]}' `).join(' AND ')}` 
                           : ` posts.${keys[0]} = '${criteria[keys[0]]}' `} `
 
             
@@ -32,11 +32,13 @@ module.exports = class MySQLStorage extends BaseStorage{
 
             const [rows] = await connectionPool.promise().execute(query)
 
+
+
             if(!rows.length){
                 return false
             }
 
-            if(rows.length == 1){
+            if(rows.length === 1){
                 const postData = Object.assign({} , rows[0])
                 return postData
             }else{
