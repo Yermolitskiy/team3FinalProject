@@ -40,17 +40,18 @@ class PostController {
             const {userId} = req.user
 
             if(id){
+               
                 const post = await PostRepository.getBy({id , author:userId})
                 //when not author tries to access specific post
         
                 if(!post.id){
                     return res.status(400).json('Forbidden')
                 }
-                console.log(post)
+             
                 return res.status(200).json(post)
             }else{
                 const posts = await PostRepository.getBy({author:userId})
-                return res.status(200).json(posts)
+                return res.status(200).json(addMetaData(req,res,posts))
             }
        
         } catch (error) {
@@ -61,8 +62,8 @@ class PostController {
     async createPost(req,res){
         try {
             const data = req.body
-            const {id} = req.user
-            const post = await PostRepository.create({...data , author:id})
+            const {userId} = req.user
+            const post = await PostRepository.create({...data , author:userId})
             return res.status(201).json(post)
             
         } catch (error) {

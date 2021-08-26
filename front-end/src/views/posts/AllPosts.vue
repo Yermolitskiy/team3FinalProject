@@ -1,5 +1,6 @@
 <template>
     <div>
+       
         <div class="article_list" v-if="!loading">
             <article-card v-for="article in articleData" 
                 :body="article.body" :title="article.title" 
@@ -7,18 +8,19 @@
                 :date="article.date"
                 :key="'article-'+article.id" />
         </div>
-        <div class="loader" v-if="loading">
+         <div class="loader" v-if="loading">
             ...Loading
         </div>
+        <div v-if="!loading" v-intersection="fetchMorePosts" class="observer" ></div>
     </div>
 </template>
 
 <script>
 
-    import {mapActions, mapState} from 'vuex'
+    import {mapActions, mapMutations, mapState} from 'vuex'
     // import {actionsIds} from '@/store/postModule/actions'
     import {actionsIds} from '../../store/postModule/actions'
-
+    import {postMutationsIds} from '../../store/postModule/mutations'
     export default {
         data(){
             
@@ -30,12 +32,21 @@
                     {id:4,author:'Boris Andropov',title:'Some title 4', body:'Lose away off why half led have near bed. At engage simple father of period others except. My giving do summer of though narrow marked at. ' , date:'14.04.2021'},
                     {id:5 , author:'Kendrick Lamar' ,  title:'Some title 5' ,body:'Be me shall purse my ought times. Joy years doors all would again rooms these. Solicitude announcing as to sufficient my. No my reached suppose proceed pressed perhaps he.',date:'22.02.2021'},
                     {id:6 , author:'Josh Bush' , title:'Some title 6' , body:'Eagerness it delighted pronounce repulsive furniture no. Excuse few the remain highly feebly add people manner say. It high at my mind by roof. No wonder worthy in dinner. ' , date:'14.03.2021'}
-                ]
+                ],
+
+
+               
+
+
             }
         },
         methods:{
           ...mapActions({
-              fetchPosts: 'post/' + actionsIds.FETCH_POSTS
+              fetchPosts: 'post/' + actionsIds.FETCH_POSTS,
+              fetchMorePosts: 'post/' + actionsIds.FETCH_MORE_POSTS
+          }),
+          ...mapMutations({
+              setPage:'post/' + postMutationsIds.SET_PAGE
           })
         },
         computed:{
@@ -46,6 +57,11 @@
         },
         mounted(){
             this.fetchPosts()
+        },
+
+        //this is only for scroll fetch case , for pagination it's should be changed or removed
+        beforeUnmount(){
+            this.setPage(0)
         }
     
     }
@@ -60,5 +76,9 @@
 }
 .article_list > div{
     margin:3rem 0 3rem 0;
+}
+.observer{
+    height:30px;
+    background:gray;
 }
 </style>

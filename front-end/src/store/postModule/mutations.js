@@ -8,12 +8,19 @@ export const postMutationsIds = {
     CHANGE_USER_POST : 'changeUserPost',
     SELECT_POST : 'selectPost',
     SET_MESSAGE : 'setMessage',
-    REMOVE_POST: 'removePost'
+    REMOVE_POST: 'removePost',
+    SET_PAGE:'setPage',
+    SET_LIMIT:'setLimit',
+    SET_TOTAL_PAGES:'setTotalPages',
+    SET_USER_META:'setUserMeta'
 }
 
 const mutations = {
     setPosts(state,posts){
         state.posts = posts
+    },
+    setUserMeta(state, meta){
+        state.userMeta = meta
     },
     setMessage(state,msg){
         state.message = msg
@@ -30,6 +37,13 @@ const mutations = {
     setUserPosts(state,posts){
         state.userPosts = posts
     },
+    setPage(state,page){
+        state.page = page
+    },
+    setLimit(state,limit){
+        state.limit = limit
+    },
+    
     // changePost(state,{data , id}){
 
     //     state.posts[state.posts.findIndex(post => post.id === id)] = 
@@ -45,6 +59,9 @@ const mutations = {
     },
     removePost(state,postId){
         state.userPosts = state.userPosts.filter(post => post.id !== postId)
+    },
+    setTotalPages(state,total){
+        state.totalPages = total
     }
 }
 

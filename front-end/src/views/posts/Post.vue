@@ -9,7 +9,7 @@
            <div v-if="loading">
                ...Loading
            </div>
-            <div class="post_wrapper" v-if="$route.name === 'editPost' && !loading">
+            <div class="post_wrapper" v-if="$route.name === 'editPost' && !loading && userPost">
 
                   <custom-form @onSubmit="updatePost" :initialData="formData"  :formType="'postForm'">
                     <template #header>
@@ -53,15 +53,13 @@ import {actionsIds} from '../../store/postModule/actions'
                userPost: (state) => state.post.selectedPost ,
                loading: (state) => state.post.postsLoading}) ,
                formData(){
-                   return this.userPost ? Object.assign({} , {title:this.userPost.title , body:this.userPost.body} ) : {}
+                   return  Object.assign({} , {title:this.userPost.title , body:this.userPost.body} ) 
                }
         //    post(){
         //        return Array.from(this.$store.state.post.posts).find(post => post.id === Number.parseInt(this.$route.params.id))
         //    }
        },
        mounted(){
-        //    console.log(this.loading)
-        //    console.log(this.userPost)
            if(this.$route.name === 'editPost'){
                this.getMyPost(Number.parseInt(this.$route.params.id))
            }

@@ -1,5 +1,27 @@
 <template>
     <div>
+
+
+    <!-- delete modal window -->
+    <!-- TODO:: disable rule globally because since vue3 v-model with arguments is supported -->
+     <!-- eslint-disable -->
+        <my-dialog v-model:show="modalVisible" >
+     <!-- eslint-enable -->
+            <div class="modal_delete">
+                <div>
+                    Are you sure you want to delete this post?
+                </div>
+                <button-1 @click="deletePost" style="background:red">Delete</button-1>
+            </div>
+        </my-dialog>
+    <!-- delete modal window -->
+
+    <!-- simple text loading status -->
+        <div class="loader" v-if="loading">
+            ...Loading
+        </div>
+
+
        <div class="article_list" v-if="!loading && ($route.name === 'myPosts')">
            <div v-for="article in myPosts" :key="'article-'+article.id" >
                 <article-card  
@@ -16,24 +38,11 @@
            </div>
            
         </div>
-        <div class="loader" v-if="loading">
-            ...Loading
-        </div>
 
-
-     <!-- TODO:: disable rule globally because since vue3 v-model with arguments is supported -->
-     <!-- eslint-disable -->
-        <my-dialog v-model:show="modalVisible" >
-     <!-- eslint-enable -->
-            <div class="modal_delete">
-                <div>
-                    Are you sure you want to delete this post?
-                </div>
-                <button-1 @click="deletePost" style="background:red">Delete</button-1>
-            </div>
-        </my-dialog>
+        <div class="observer" v-intersection="fetchMorePosts" v-if="!loading && ($route.name === 'myPosts')" ></div>
 
         <!-- displays single post/post edit form depending on route name -->
+        <!-- currently tested and implemented only edit view -->
         <!-- /myPosts/:id/edit -->
         <!-- /myPosts/:id -->
         <router-view/>
@@ -45,8 +54,9 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import {actionsIds} from '../../store/postModule/actions'
+import {postMutationsIds} from '../../store/postModule/mutations'
     export default {
         data(){
             return{
@@ -63,14 +73,23 @@ import {actionsIds} from '../../store/postModule/actions'
                 this.handleDeletePost(this.postId)
                 this.modalVisible = false
             },
+            fetchMorePosts(){
+                this.handleFetchMorePosts({ofCurrentUser:true})
+            },
             ...mapActions({
-                fetchMyPosts : 'post/' + actionsIds.FETCH_MY_POSTS,
-                handleDeletePost:'post/' + actionsIds.DELETE_POST})
+                fetchPosts : 'post/' + actionsIds.FETCH_POSTS,
+                handleFetchMorePosts: 'post/' + actionsIds.FETCH_MORE_POSTS,
+                handleDeletePost:'post/' + actionsIds.DELETE_POST}),
+            ...mapMutations({
+                setPage:'post/' + postMutationsIds.SET_PAGE
+            })
         },
-        mounted(){ this.fetchMyPosts() },
+        mounted(){ this.fetchPosts({ofCurrentUser:true}) },
+        beforeUnmount(){this.setPage(0)},
         computed:{
             ...mapState({myPosts: state => state.post.userPosts})
         },
+
         
 
     }
@@ -102,5 +121,10 @@ import {actionsIds} from '../../store/postModule/actions'
 }
 .modal_delete :first-child{
     margin:10px 0 10px 0;
+}
+
+.observer{
+    height:30px;
+    background:gray;
 }
 </style>

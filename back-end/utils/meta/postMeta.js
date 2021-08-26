@@ -2,8 +2,10 @@
 function addPostMeta (req, res, initialPosts) {
     let posts;
     const meta = {}
+  
 
     const {query , baseUrl} = req
+  
     const offset = Number(query.offset) || 0
     const limit = Number(query.limit) || 10
     
@@ -43,13 +45,19 @@ function addPostMeta (req, res, initialPosts) {
             posts = initialPosts.slice(offset , offset + limit)
 
             res.setHeader('x-total-count' , initialPosts.length)
+            //the header that Emils was missing to enable header access on client
+            res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count')
 
 
         }else{
+
+         
             posts = initialPosts
+         
 
             meta.list_entries = `${process.env.API_URL}${baseUrl.replace(/\/\d+$/ , '')}`
         }
+
 
         return {
             posts,meta
