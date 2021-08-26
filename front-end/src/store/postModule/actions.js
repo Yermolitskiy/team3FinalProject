@@ -70,6 +70,7 @@ const actions = {
             const ofCurrentUser = data?.ofCurrentUser
             const offset = state.page * state.limit
             if(!ofCurrentUser){
+               
                 commit(postMutationsIds.SET_PAGE , state.page + 1)
 
                 const response = await axios.get('http://localhost:5000/api/posts' , {
@@ -84,18 +85,17 @@ const actions = {
             }
             //else fetch more user's posts
             else{
-
-                commit(postMutationsIds.SET_PAGE , state.page + 1)
-                const response = await axios.get('http://localhost:5000/api/posts/userPosts' , {
-                    params:{
-                        offset , limit:state.limit
-                    }
-                })
-        
-                commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
-                commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , ...response.data.posts])
-                commit(postMutationsIds.SET_USER_META , response.data.meta)
-
+                if(state.page + 1 < state.totalPages){
+                    commit(postMutationsIds.SET_PAGE , state.page + 1)
+                    const response = await axios.get('http://localhost:5000/api/posts/userPosts' , {
+                        params:{
+                            offset , limit:state.limit
+                        }
+                    })            
+                    commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
+                    commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , ...response.data.posts])
+                    commit(postMutationsIds.SET_USER_META , response.data.meta)
+                }
             }
            
         } catch (error) {
@@ -147,12 +147,16 @@ const actions = {
 
     },
 
+    //likely to change on getPost(context , {ofCurrentUser : boolean})
     async getMyPost({commit} , id){
             try {
                
                 commit(postMutationsIds.SET_LOADING , true)
                 const response = await axios.get(`http://localhost:5000/api/posts/userPosts/${id}`)
-                commit(postMutationsIds.SELECT_POST , response.data)
+                commit(postMutationsIds.SELECT_POST , response.data.posts)
+
+                //currently is not used
+                commit(postMutationsIds.SET_USER_META , response.data.meta)
     
             } catch (error) {
                 console.log(error.response.data.error)

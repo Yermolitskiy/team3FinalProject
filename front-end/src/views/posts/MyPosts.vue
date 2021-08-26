@@ -39,7 +39,7 @@
            
         </div>
 
-        <div class="observer" v-intersection="fetchMorePosts" v-if="!loading && ($route.name === 'myPosts')" ></div>
+        <div class="observer" v-intersection="fetchMorePosts" v-if="!loading && myPosts && ($route.name === 'myPosts')" ></div>
 
         <!-- displays single post/post edit form depending on route name -->
         <!-- currently tested and implemented only edit view -->

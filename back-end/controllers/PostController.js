@@ -48,7 +48,7 @@ class PostController {
                     return res.status(400).json('Forbidden')
                 }
              
-                return res.status(200).json(post)
+                return res.status(200).json(addMetaData(req,res,post))
             }else{
                 const posts = await PostRepository.getBy({author:userId})
                 return res.status(200).json(addMetaData(req,res,posts))

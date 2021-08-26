@@ -2,44 +2,49 @@
 function addPostMeta (req, res, initialPosts) {
     let posts;
     const meta = {}
+
+    console.log(req.path)
   
 
-    const {query , baseUrl} = req
+    const {query , baseUrl , path} = req
   
     const offset = Number(query.offset) || 0
     const limit = Number(query.limit) || 10
     
     //filter meta posts
     meta.filter = {}
-    meta.filter.author = `${process.env.API_URL}${baseUrl}?offset=${offset}&limit=${limit}&filter=author`
-    meta.filter.publicationDate =  `${process.env.API_URL}${baseUrl}?offset=${offset}&limit=${limit}&filter=publicationDate` 
+    meta.filter.publicationDate =  `${process.env.API_URL}${baseUrl}${path === '/'?'':path}?offset=${offset}&limit=${limit}&filter=publicationDate` 
     
     meta.order = {}
-    meta.order.author = `${process.env.API_URL}${baseUrl}?offset=${offset}&limit=${limit}&order=author`
-    meta.order.publicationDate =  `${process.env.API_URL}${baseUrl}?offset=${offset}&limit=${limit}&order=publicationDate` 
-   
+    meta.order.publicationDate =  `${process.env.API_URL}${baseUrl}${path === '/'?'':path}?offset=${offset}&limit=${limit}&order=publicationDate` 
+    
+    //not best idea
+    if(path !== '/userPosts'){
+        meta.filter.author = `${process.env.API_URL}${baseUrl}?offset=${offset}&limit=${limit}&filter=author`
+        meta.order.author = `${process.env.API_URL}${baseUrl}?offset=${offset}&limit=${limit}&order=author`
+    }
 
 
     const isList = Array.isArray(initialPosts)
 
     if(isList){
-        meta.single_post = `${process.env.API_URL}${baseUrl}/:id`
+        meta.single_post = `${process.env.API_URL}${baseUrl}${path === '/'?'':path}${path === '/'?'':path}/:id`
 
         if(initialPosts.length > limit){
             meta.links = {}
 
             if(offset > 0 ){
-                meta.links.first = `${process.env.API_URL}${baseUrl}?offset=0&limit=${limit}`
+                meta.links.first = `${process.env.API_URL}${baseUrl}${path === '/'?'':path}?offset=0&limit=${limit}`
 
-                meta.links.prev = `${process.env.API_URL}${baseUrl}?offset=${Math.max(offset - limit , 0)}&limit=${limit}`
+                meta.links.prev = `${process.env.API_URL}${baseUrl}${path === '/'?'':path}?offset=${Math.max(offset - limit , 0)}&limit=${limit}`
             
             }
             
             if(initialPosts.length > offset + limit){
-                meta.links.next = `${process.env.API_URL}${baseUrl}?offset=${offset + limit}&limit=${limit}`
+                meta.links.next = `${process.env.API_URL}${baseUrl}${path === '/'?'':path}?offset=${offset + limit}&limit=${limit}`
 
                 const lastPossibleOffset = Math.floor((initialPosts.length - 1) / limit) * limit
-                meta.links.last = `${process.env.API_URL}${baseUrl}?offset=${lastPossibleOffset}&limit=${limit}`
+                meta.links.last = `${process.env.API_URL}${baseUrl}${path === '/'?'':path}?offset=${lastPossibleOffset}&limit=${limit}`
             }
 
             posts = initialPosts.slice(offset , offset + limit)
@@ -47,23 +52,24 @@ function addPostMeta (req, res, initialPosts) {
             res.setHeader('x-total-count' , initialPosts.length)
             //the header that Emils was missing to enable header access on client
             res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count')
-
-
+            
+            
         }else{
-
-         
+            res.setHeader('x-total-count' , initialPosts.length)
             posts = initialPosts
-         
-
-            meta.list_entries = `${process.env.API_URL}${baseUrl.replace(/\/\d+$/ , '')}`
+            res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count')
         }
+        
+        
+    }else{
+        posts = initialPosts
+        meta.list_entries = `${process.env.API_URL}${baseUrl.replace(/\/\d+$/ , '')}`
 
-
-        return {
-            posts,meta
-        }
     }
-
+    
+    return {
+        posts,meta
+    }
 }
 
 module.exports = addPostMeta
