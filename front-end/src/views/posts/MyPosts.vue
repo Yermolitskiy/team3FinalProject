@@ -27,8 +27,10 @@
                 <article-card  
                 :body="article.body" :title="article.title" 
                 :author="article.author"
-                :date="article.date"
+                :date="article.publicationDate.split('T')[0]"
                 />
+                <!-- with publication time  -->
+                <!-- :date="article.publicationDate.split('T')[0]  + ' ' + article.publicationDate.split('T')[1].split('.')[0]" -->
 
                 <div class="button_wrapper">
                     <button @click="$router.push({name:'editPost' , params:{id:article.id}})">Click to Navigate</button>

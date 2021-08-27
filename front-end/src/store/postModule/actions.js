@@ -70,7 +70,8 @@ const actions = {
             const ofCurrentUser = data?.ofCurrentUser
             const offset = state.page * state.limit
             if(!ofCurrentUser){
-               
+                //prevents infinite repeatative scroll when post amount is less than 1 page
+                if(state.page + 1 < state.totalPages){
                 commit(postMutationsIds.SET_PAGE , state.page + 1)
 
                 const response = await axios.get('http://localhost:5000/api/posts' , {
@@ -82,6 +83,7 @@ const actions = {
                 commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
                 commit(postMutationsIds.SET_POSTS , [...state.posts , ...response.data.posts])
                 commit(postMutationsIds.SET_META , response.data.meta)
+            }
             }
             //else fetch more user's posts
             else{
@@ -114,7 +116,10 @@ const actions = {
         try {
             // id is recieved from token payload instead
             // const authorId =  rootState.auth.user.id
-            const publicationDate = Date.now()
+            const now = new Date()
+            const publicationDate = now.toISOString().split('T')[0]
+
+
             //turns proxy object into plain js object and returning data property
             const postData = {...JSON.parse(JSON.stringify(data))}.data
 

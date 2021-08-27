@@ -5,7 +5,7 @@
             <article-card v-for="article in articleData" 
                 :body="article.body" :title="article.title" 
                 :author="article.author"
-                :date="article.date"
+                :date="article.publicationDate.split('T')[0]"
                 :key="'article-'+article.id" />
         </div>
          <div class="loader" v-if="loading">
