@@ -2,6 +2,8 @@ const PostRepository = require('../repositories/PostRepository')
 const addMetaData = require('../utils/meta/postMeta')
 
 
+
+
 class PostController {
 
 
@@ -63,8 +65,21 @@ class PostController {
         try {
             const data = req.body
             const {userId} = req.user
-            const post = await PostRepository.create({...data , author:userId})
-            return res.status(201).json(post)
+            if(req.file){
+                
+                const postImage = `${process.env.API_URL}${process.env.PUBLIC_POSTS_STATIC}${req.file.filename}`
+                const date = new Date()
+                const publicationDate = date.toISOString()
+                const post = await PostRepository.create({...data ,author:userId, postImage , publicationDate})
+                return res.status(201).json(post)
+
+            }else{
+
+                const date = new Date()
+                const publicationDate = date.toISOString()
+                const post = await PostRepository.create({...data,author:userId  , publicationDate})
+                return res.status(201).json(post)
+            }
             
         } catch (error) {
             console.log(error)
@@ -104,6 +119,16 @@ class PostController {
             return res.status(404).json(error)
         }
        
+    }
+
+    async testImageUpload(req,res,next){
+        try {
+            console.log(req.file)
+            console.log(req.body)
+            return res.send('hi')
+        } catch (error) {
+            return res.status(400).json(error)
+        }
     }
 
 }

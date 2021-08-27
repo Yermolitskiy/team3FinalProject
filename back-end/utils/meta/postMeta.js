@@ -3,7 +3,7 @@ function addPostMeta (req, res, initialPosts) {
     let posts;
     const meta = {}
 
-    console.log(req.path)
+
   
 
     const {query , baseUrl , path} = req

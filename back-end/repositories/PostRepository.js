@@ -8,7 +8,6 @@ class PostRepository {
 
     async getBy(criteria){
         const postData = await this.storage.findBy(criteria)
-
         if(Array.isArray(postData)){
             return postData.map(post => new PostModel(post))
         }else{
@@ -27,6 +26,8 @@ class PostRepository {
             if(!createdId) throw new Error('Error creating new post')
 
             const post = await this.storage.findBy({id:createdId})
+   
+
             return new PostModel(post)
         } catch (error) {
             throw new Error('Error creating new post')

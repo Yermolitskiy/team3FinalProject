@@ -18,7 +18,7 @@ module.exports = class MySQLStorage extends BaseStorage{
                         : ` \`${keys[0]}\` = '${criteria[keys[0]]}' ` }`
 
             //seperate query for post because it needs extra join and concat clauses to swap numeric id with user name and surname
-            const innerJoinPostsQuery = `SELECT CONCAT(name , " " , surname) as author , posts.id , posts.body , posts.title , posts.publicationDate FROM posts 
+            const innerJoinPostsQuery = `SELECT CONCAT(name , " " , surname) as author , posts.id , posts.body , posts.title , posts.publicationDate , posts.postImage FROM posts 
                     INNER JOIN users ON posts.author = users.id 
                     WHERE ${keys.length > 1 ? `${keys.flatMap(key => ` posts.${key} = '${criteria[key]}' `).join(' AND ')}` 
                           : ` posts.${keys[0]} = '${criteria[keys[0]]}' `} `

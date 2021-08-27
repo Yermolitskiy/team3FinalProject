@@ -6,6 +6,7 @@ class Post {
         this.body = data.body
         this.author = data.author
         this.publicationDate = data.publicationDate
+        this.postImage = data.postImage
     }
 
 }
