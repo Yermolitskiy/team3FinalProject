@@ -3,7 +3,7 @@ export const postMutationsIds = {
     SET_POSTS : 'setPosts',
     SET_LOADING : 'setLoading',
     SET_ERROR : 'setError' ,
-    SET_META : 'setMeta',
+    SET_POSTS_META : 'setPostsMeta',
     SET_MY_POSTS : 'setUserPosts',
     CHANGE_USER_POST : 'changeUserPost',
     SELECT_POST : 'selectPost',
@@ -12,15 +12,15 @@ export const postMutationsIds = {
     SET_PAGE:'setPage',
     SET_LIMIT:'setLimit',
     SET_TOTAL_PAGES:'setTotalPages',
-    SET_USER_META:'setUserMeta'
+    SET_POST_META:'setPostMeta'
 }
 
 const mutations = {
     setPosts(state,posts){
         state.posts = posts
     },
-    setUserMeta(state, meta){
-        state.userMeta = meta
+    setPostMeta(state, meta){
+        state.postMeta = meta
     },
     setMessage(state,msg){
         state.message = msg
@@ -31,8 +31,8 @@ const mutations = {
     setError(state,error){
         state.error = error
     },
-    setMeta(state , meta){
-        state.meta = meta
+    setPostsMeta(state , meta){
+        state.postsMeta = meta
     },
     setUserPosts(state,posts){
         state.userPosts = posts

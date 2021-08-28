@@ -1,27 +1,54 @@
 <template>
     <div>
-       
-        <div class="article_list" v-if="!loading">
-            <article-card v-for="article in articleData" 
-                :body="article.body" :title="article.title" 
-                :author="article.author"
-                :date="article.publicationDate.split('T')[0]"
-                :key="'article-'+article.id" />
-        </div>
-         <div class="loader" v-if="loading">
+
+        <!-- single post view -->
+       <router-view/>
+        <!-- single post view -->
+
+
+         <div class="loader" v-if="loading && $route.name==='AllPosts'">
             ...Loading
         </div>
+
+        <div  v-if="!loading && $route.name==='AllPosts'">
+            <div class="article_list" v-if="Array.isArray(articleData) && articleData">
+                <article-card v-for="article in articleData" 
+                :body="article.body" :title="article.title" 
+                :author="article.author"
+                :img="article.postImage"
+                :date="article.publicationDate.split('T')[0]"
+                :class="{hovered:hover === article.id}" @mouseover="hover = article.id" @mouseleave="hover = false"
+                @click="$router.push({name:'singlePost' , params:{id:article.id}})"
+                :key="'article-'+article.id" />
+            </div>
+            <div v-else-if="!Array.isArray(articleData) && articleData">
+                <article-card
+                    :body="articleData.body" :title="articleData.title" 
+                    :author="articleData.author"
+                    :img="articleData.postImage"
+                    :date="articleData.publicationDate.split('T')[0]"
+                     />
+                 />
+            </div>
+            <div v-else>
+                <h1>No posts yet</h1>
+            </div>
+            
         <div v-if="!loading" v-intersection="fetchMorePosts" class="observer" ></div>
+        </div>
+        
     </div>
 </template>
 
 <script>
 
     import {mapActions, mapMutations, mapState} from 'vuex'
+import ArticleCard from '../../components/ArticleCard.vue'
     // import {actionsIds} from '@/store/postModule/actions'
     import {actionsIds} from '../../store/postModule/actions'
     import {postMutationsIds} from '../../store/postModule/mutations'
     export default {
+  components: { ArticleCard },
         data(){
             
             return{
@@ -33,6 +60,7 @@
                     {id:5 , author:'Kendrick Lamar' ,  title:'Some title 5' ,body:'Be me shall purse my ought times. Joy years doors all would again rooms these. Solicitude announcing as to sufficient my. No my reached suppose proceed pressed perhaps he.',date:'22.02.2021'},
                     {id:6 , author:'Josh Bush' , title:'Some title 6' , body:'Eagerness it delighted pronounce repulsive furniture no. Excuse few the remain highly feebly add people manner say. It high at my mind by roof. No wonder worthy in dinner. ' , date:'14.03.2021'}
                 ],
+                hover:false
 
 
                
@@ -68,6 +96,11 @@
 </script>
 
 <style scoped>
+
+.hovered{
+  background-color: skyblue;
+  cursor:pointer;
+}
 
 .article_list{
     display: flex;

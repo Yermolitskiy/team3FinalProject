@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="error"> {{error}} </div>
-        <div v-else-if="postCreated"> Post is successfuly created </div>
+        <div v-else-if="message"> {{message}} </div>
 
         <custom-form @onSubmit="createPost" formType="postForm">
             <template #header>
@@ -17,29 +17,28 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import { actionsIds } from '../../store/postModule/actions'
+import {postMutationsIds} from '../../store/postModule/mutations'
 // import { actionsIds } from '@store/postModule/actions'
     
     export default {
-        data(){
-            return {
-                postCreated:false
-            }
-        },
+        
         methods:{
             createPost(data){
+                //refactor this later
                 this.handleCreatePost({data})
-                    .then(() => {
-                        if(!this.error) {
-                            console.log("OOK")
-                            this.postCreated = true}
-                    })
             },
-            ...mapActions({handleCreatePost : 'post/' + actionsIds.CREATE_POST})
+            ...mapActions({handleCreatePost : 'post/' + actionsIds.CREATE_POST}),
+            ...mapMutations({setMessage : 'post/' + postMutationsIds.SET_MESSAGE})
         },
         computed:{
-            ...mapState({error:state => state.post.error})
+            ...mapState({
+                error:state => state.post.error,
+                message:state => state.post.message})
+        },
+        beforeUnmount(){
+            this.setMessage(null)
         }
     }
 </script>

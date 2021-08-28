@@ -1,6 +1,7 @@
 
 // form better to be refactored later
 //prop1 form types (formTypes) - 1.login 2.register 3.postForm
+//prop2 initial data
 <template>
   <form>
     <div class="form_header">
@@ -91,6 +92,8 @@
         placeholder="title"
         id="title"
       />
+
+
       <textarea
         v-model="inputValues.postForm.body"
         placeholder="text"
@@ -99,6 +102,15 @@
         cols="30"
         rows="10"
       ></textarea>
+
+      <div v-if="inputValues.postForm.postImage">
+        <p>Post Image 200x150 preview</p>
+        <img class="post_image_preview" :src="inputValues.postForm.postImageUrl" alt="">
+      </div>
+      <button-1 style="background:green" @click.prevent="pickFile">Upload Image</button-1>
+      <input type="file" style="display:none" ref="fileInput" accept="image/* , .jpg , .png" @change="onFilePicked" >
+
+
     </div>
 
     <div v-else>
@@ -144,6 +156,8 @@ export default {
         postForm:{
           body: "",
           title: "",
+          postImage:null,
+          postImageUrl:null
         }
       },
      
@@ -164,21 +178,53 @@ export default {
   },
 
   mounted(){
-    console.log(this.initialData)
     if(this.initialData){
       this.inputValues[this.formType] = this.initialData
     }
   },
 
   methods: {
-    submit() {
-      //TODO::add form validation
 
+    pickFile(){
+      this.$refs.fileInput.click()
+    },
+    onFilePicked(event){
+      const files = event.target.files
+      this.inputValues.postForm.postImage = files[0]
+  
+      //picture preview
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load' , () => this.inputValues.postForm.postImageUrl = fileReader.result)
+      fileReader.readAsDataURL(files[0])
+    },
+    submit() {
       const errors = validator(this.inputValues[this.formType] , this.formType)
 
       if(!errors.length){
         this.validationErrors = []
         this.$emit('onSubmit' , this.inputValues[this.formType] )
+        //seting back to empty form
+        this.inputValues = {
+                        register: {
+                          name: "",
+                          surname: "",
+                          email: "",
+                          password: "",
+                          password_confirm: "",
+                          age: "",
+                          },
+                        login:{
+                          email: "",
+                          password: "",
+                          },
+                        postForm:{
+                          body: "",
+                          title: "",
+                          postImage:null,
+                          postImageUrl:null
+                        }
+                      }
+
           }
       else 
         this.validationErrors = errors
@@ -191,6 +237,11 @@ export default {
 
 
 @media only screen and (min-width: 325px) {
+  .post_image_preview{
+    max-width: 200px;
+    max-height: 150px;
+    aspect-ratio: 3/2;
+  }
   form {
     min-width: 20rem;
     max-width: 30rem;

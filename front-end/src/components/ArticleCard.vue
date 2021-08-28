@@ -1,7 +1,8 @@
 <template>
-    <div class="article_container">
-        <div class="img_container">
-             <h1>19 rem x 9.5 rem</h1>
+    <div class="article_container" >
+        
+        <div class="img_container" :style="randomBackgroundColor">
+            <img :src="img ? img : require(`@/assets/posts_fallback_images/${randomPostFallbackImage}.jpg`)" class="image" alt="">
         </div>
 
         <div class="article_body">
@@ -14,7 +15,7 @@
                     <hr/>
                         <div class="info_container_wrapper">
 
-                            <div class="logo">
+                            <div class="logo" :style="randomBackgroundColor">
                                 {{authorInitials}}
                             </div>
 
@@ -39,6 +40,24 @@
 <script>
     export default {
         name:'article-card',
+        data(){
+            return{
+                randomColors:[
+                    'background-color:rgb(99,86,240)',
+                    'background-color:rgb(98,156,240)',
+                    'background-color:rgb(75,240,108)',
+                    'background-color:rgb(240,211,50)',
+                    'background-color:rgb(242,163,7)',
+                    ],
+                randomBackgroundImages:[
+                    'biggie',
+                    'husky',
+                    'pug',
+                    'shibi_inu',
+                    'airdaleterriers',
+                ]
+            }
+        },
         props:{
             img:{
                 type:String
@@ -63,7 +82,14 @@
     computed:{
         authorInitials(){
             return this.author.split(" ").map(n => n[0]).join('')
+        },
+        randomBackgroundColor(){
+            return this.randomColors[Math.floor(Math.random()*this.randomColors.length)]
+        },
+        randomPostFallbackImage(){
+            return this.randomBackgroundImages[Math.floor(Math.random()*this.randomBackgroundImages.length)]
         }
+        
     }
     }
 </script>
@@ -79,9 +105,15 @@
         max-width: 19rem;
     }
     .img_container{
-        background-color: gray;
         min-width: 19rem;
         min-height: 9.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .image{
+        max-width: 19rem;
+        max-height: 9.5rem;
     }
     .article_body{
         min-height: 18rem;
@@ -113,7 +145,6 @@
     }
     .logo{
         margin-left: 1rem;
-        background-color: chocolate;
         height: 3rem;
         width:3rem;
         border-radius: 100%;
@@ -148,6 +179,11 @@
     .img_container {
         width: 19rem;
         height: 100%;
+        
+    }
+    .image{
+        max-width: 19rem;
+        max-height: 100%;
     }
     .article_body {
         max-height: 18rem;
@@ -170,6 +206,11 @@
     }
     .img_container{
         min-width:38rem;
+    }
+     .image{
+        max-width: 38rem;
+        max-height: 16rem;
+        padding:1rem;
     }
     .article_body{
         max-height: 22rem;

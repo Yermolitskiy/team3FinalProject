@@ -58,7 +58,7 @@ module.exports = class MySQLStorage extends BaseStorage{
             const simpleSelectQuery = `SELECT * FROM ${this._table} ${queryOptions.order ? ` ORDER BY ${queryOptions.order}` : ''}`
 
             //seperate query for post because it needs extra join and concat clauses to swap numeric id with user name and surname
-            const innerJoinPostsQuery = `SELECT CONCAT(name , " " , surname) as author , posts.id , posts.body , posts.title , posts.publicationDate FROM posts 
+            const innerJoinPostsQuery = `SELECT CONCAT(name , " " , surname) as author , posts.id , posts.body , posts.title , posts.publicationDate , posts.postImage FROM posts 
                     INNER JOIN users ON posts.author = users.id  ${queryOptions.order ? ` ORDER BY ${queryOptions.order}` : ''}`
 
             let query
@@ -76,7 +76,8 @@ module.exports = class MySQLStorage extends BaseStorage{
     async create(data){
         try {
             const keys = Object.keys(data)
-            const query = `INSERT INTO \`${this._table}\` (\`id\` ,  ${keys.flatMap(key => `\`${key}\``).join(' , ')}) VALUES (NULL , ${keys.flatMap(key => `'${data[key]}'`).join(' , ')})  `
+            const query = `INSERT INTO \`${this._table}\` (\`id\` ,  ${keys.flatMap(key => `\`${key}\``).join(' , ')})
+             VALUES (NULL , ${keys.flatMap(key => `'${data[key]}'`).join(' , ')})  `
             await connectionPool.promise().execute(query)
 
             const getInsertedIdQuery = `SELECT LAST_INSERT_ID()`

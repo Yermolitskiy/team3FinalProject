@@ -21,23 +21,46 @@
             ...Loading
         </div>
 
+ 
+        <div v-if="message">
+           <h2>{{message}}</h2> 
+        </div>
+
 
        <div class="article_list" v-if="!loading && ($route.name === 'myPosts')">
-           <div v-for="article in myPosts" :key="'article-'+article.id" >
-                <article-card  
-                :body="article.body" :title="article.title" 
-                :author="article.author"
-                :date="article.publicationDate.split('T')[0]"
-                />
-                <!-- with publication time  -->
-                <!-- :date="article.publicationDate.split('T')[0]  + ' ' + article.publicationDate.split('T')[1].split('.')[0]" -->
+           <div v-if="Array.isArray(myPosts) && myPosts">
+                <div v-for="article in myPosts" :key="'article-'+article.id" >
+                    <article-card  
+                    :body="article.body" :title="article.title" 
+                    :img="article.postImage"
+                    :author="article.author"
+                    :date="article.publicationDate.split('T')[0]"
+                    :class="{hovered:hover === article.id}" @mouseover="hover = article.id" @mouseleave="hover = false"
+                    @click="$router.push({name:'myPost' , params:{id:article.id}})"
+                    />
+                    <!-- with publication time  -->
+                    <!-- :date="article.publicationDate.split('T')[0]  + ' ' + article.publicationDate.split('T')[1].split('.')[0]" -->
 
-                <div class="button_wrapper">
-                    <button @click="$router.push({name:'editPost' , params:{id:article.id}})">Click to Navigate</button>
-                    <button @click="showModal(article.id)" >Delete</button>
+                    <div class="button_wrapper">
+                        <button @click="$router.push({name:'editPost' , params:{id:article.id}})">Click to Navigate</button>
+                        <button @click="showModal(article.id)" >Delete</button>
+                    </div>
                 </div>
-                
            </div>
+           <div v-else-if="!Array.isArray(myPosts) && myPosts">
+               <article-card 
+                    :body="myPosts.body" :title="myPosts.title"
+                    :img="myPosts.postImage" :author="myPosts.author" :date="myPosts.publicationDate.split('T')[0]"/>
+
+                 <div class="button_wrapper">
+                        <button @click="$router.push({name:'editPost' , params:{id:myPosts.id}})">Edit</button>
+                        <button @click="showModal(myPosts.id)" >Delete</button>
+                </div>
+           </div>
+           <div v-else>
+               <h1>No posts created</h1>
+           </div>
+           
            
         </div>
 
@@ -47,7 +70,7 @@
         <!-- currently tested and implemented only edit view -->
         <!-- /myPosts/:id/edit -->
         <!-- /myPosts/:id -->
-        <router-view/>
+        <router-view :key="$route.fullPath"/>
         <!-- /myPosts/:id -->
         <!-- /myPosts/:id/edit -->
         <!-- displays single post/post edit form depending on route name -->
@@ -57,13 +80,16 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
+import ArticleCard from '../../components/ArticleCard.vue'
 import {actionsIds} from '../../store/postModule/actions'
 import {postMutationsIds} from '../../store/postModule/mutations'
     export default {
+  components: { ArticleCard },
         data(){
             return{
                 modalVisible:false,
-                postId:undefined
+                postId:undefined,
+                hover:false
             }
         },
         methods:{
@@ -83,13 +109,20 @@ import {postMutationsIds} from '../../store/postModule/mutations'
                 handleFetchMorePosts: 'post/' + actionsIds.FETCH_MORE_POSTS,
                 handleDeletePost:'post/' + actionsIds.DELETE_POST}),
             ...mapMutations({
-                setPage:'post/' + postMutationsIds.SET_PAGE
+                setPage:'post/' + postMutationsIds.SET_PAGE ,
+                setMessage:'post/' + postMutationsIds.SET_MESSAGE
             })
         },
         mounted(){ this.fetchPosts({ofCurrentUser:true}) },
-        beforeUnmount(){this.setPage(0)},
+        beforeUnmount(){
+            this.setPage(0)
+            this.setMessage(null)
+            },
         computed:{
-            ...mapState({myPosts: state => state.post.userPosts})
+            ...mapState({
+                myPosts: state => state.post.userPosts,
+                message: state => state.post.message
+                })
         },
 
         
@@ -99,6 +132,11 @@ import {postMutationsIds} from '../../store/postModule/mutations'
 </script>
 
 <style  scoped>
+
+.hovered{
+  background-color: skyblue;
+  cursor:pointer;
+}
 
 .article_list{
     display: flex;

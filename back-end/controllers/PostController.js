@@ -9,10 +9,12 @@ class PostController {
 
     async getPost(req, res){
     
-    
+      
         const {id} = req.params
+
         try {
             if(id){
+             
                 const post = await PostRepository.getBy({id})
                 return res.status(200).json(addMetaData(req,res,post))
             }
@@ -23,10 +25,7 @@ class PostController {
             if(req.query.order)  queryOptions['order'] = req.query.order
                 
             const posts = await PostRepository.getAll(queryOptions)
-
-            
-           
-          
+  
             return res.status(200).json(addMetaData(req,res,posts))
             
         } catch (error) {
@@ -65,19 +64,15 @@ class PostController {
         try {
             const data = req.body
             const {userId} = req.user
+         
             if(req.file){
-                
+                delete data['postImageUrl']
                 const postImage = `${process.env.API_URL}${process.env.PUBLIC_POSTS_STATIC}${req.file.filename}`
-                const date = new Date()
-                const publicationDate = date.toISOString()
-                const post = await PostRepository.create({...data ,author:userId, postImage , publicationDate})
+                const post = await PostRepository.create({...data ,author:userId, postImage })
                 return res.status(201).json(post)
 
             }else{
-
-                const date = new Date()
-                const publicationDate = date.toISOString()
-                const post = await PostRepository.create({...data,author:userId  , publicationDate})
+                const post = await PostRepository.create({...data,author:userId  })
                 return res.status(201).json(post)
             }
             

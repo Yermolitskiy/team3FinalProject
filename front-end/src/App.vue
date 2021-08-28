@@ -3,7 +3,7 @@
     <div id="nav" v-if="$store.state.auth.isLogged">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-      <router-link to="/allPosts">All Posts</router-link>
+      <router-link to="/posts">All Posts</router-link>
       <router-link to="/myPosts">My Posts</router-link>
       <router-link to="/createPost">Create Post</router-link>
       <button @click="logout"> Sign out </button>

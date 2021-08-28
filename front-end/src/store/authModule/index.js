@@ -8,7 +8,8 @@ export const authModule = {
     state,
     mutations,
     actions,
-    namespaced:true,
+    namespaced:true
+  
     
 }
 

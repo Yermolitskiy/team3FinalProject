@@ -25,9 +25,16 @@ const routes = [
     component:About
   },
   {
-    path:'/allPosts',
+    path:'/posts',
     name:'AllPosts',
-    component:AllPosts
+    component:AllPosts,
+    children:[
+      {
+        path:':id',
+        name:'singlePost',
+        component:Post
+      }
+    ]
   },
   {
     path:'/createPost',

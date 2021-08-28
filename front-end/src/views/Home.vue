@@ -1,10 +1,29 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
+    <img alt="Accenture Bootcamp logo" src="../assets/logo.jpg">
 
 
-    <div class="card_container" :style="gridStyle" >
-      <post-card v-for="post in postsData" :title="post.title" :body="post.body" :key="'post-' + post.id"/>
+    <div class="card_container" :style="gridStyle" v-if="!loading && Array.isArray(postsData)">
+      <post-card v-for="post in postsData"
+        :img="post.postImage" 
+        :class="{hovered:hover === post.id}" @mouseover="hover = post.id" @mouseleave="hover = false"
+        @click="$router.push({name:'singlePost' , params:{id:post.id}})"
+        :title="post.title"
+        :key="'post-' + post.id"/>
+    </div>
+    <div v-else-if="!loading && !Array.isArray(postData)">
+      <post-card 
+        :title="postsData.title" 
+        @click="$router.push({name:'singlePost' , params:{id:postsData.id}})"
+        :class="{hovered:hover === post.id}" @mouseover="hover = true" @mouseleave="hover = false"
+        :img="postsData.postImage" :id="postsData.id" />
+    </div>
+    <div v-else-if="!loading && !postData">
+      <h1>No posts</h1>
+    </div>
+
+    <div v-if="loading">
+      ...Loading
     </div>
 
   </div>
@@ -13,28 +32,30 @@
 <script>
 
 import PostCard from '@/components/PostCard'
+import { mapActions, mapMutations, mapState } from 'vuex'
+import {postMutationsIds} from '../store/postModule/mutations'
+import {actionsIds} from '../store/postModule/actions'
 
 
 export default {
   data(){
     return{
-      postsData:[
+      dummyPostsData:[
         {title:'dummy tite 2' , body:'dummy body 2' , id:2},
         {title:'dummy titlle 1' , body:'dummy body 1' , id:1},
-        {title:'dummy title 3' , body:'dummy body 3' , id:3},
-        {title:'dummy title 4' , body:'dummy body 4' , id:4},
-        {title:'dummy title 5' , body:'dummy body 5' , id:5},
-        {title:'dummy title 6' , body:'dummy body 6' , id:6},
-        {title:'dummy title 7' , body:'dummy body 7' , id:7},
-        {title:'dummy title 8' , body:'dummy body 8' , id:8},
-        {title:'dummy title 9' , body:'dummy body 9' , id:9},
-        {title:'dummy title 10' , body:'dummy body 10' , id:10},
+        {title:'dummy title 3' , body:'dummy body 3' , id:3}
         
-      ]
+      ],
+      hover:false
     }
   },
   components:{PostCard},
   computed:{
+  ...mapState({
+      loading: state => state.post.postsLoading,
+      postsData: state => state.post.posts,
+      error: state => state.post.error
+    }),
     gridStyle(){
       return {
         gridTemplate: `repeat(${this.postsRows} ,1fr) / repeat(3 , 1fr)`,
@@ -45,11 +66,25 @@ export default {
       return Math.ceil(this.postsData.length/3) 
     }
   },
+ 
   methods:{
-    
+    ...mapMutations({
+      setLimit:'post/'+postMutationsIds.SET_LIMIT
+    }),
+    ...mapActions({
+      fetchPosts:'post/'+actionsIds.FETCH_POSTS
+    }),
+    test(event){
+      console.log('test')
+      console.log(event)
+    }
   },
   mounted(){
-    console.log(this.gridStyle)
+   this.setLimit(3)
+   this.fetchPosts()
+  },
+  beforeUnmount(){
+    this.setLimit(10)
   }
  
 }
@@ -57,10 +92,13 @@ export default {
 
 <style scoped>
 
-
+.hovered{
+  background-color: skyblue;
+  cursor:pointer;
+}
 
 @media only screen and (min-width:325px){
-  .card_container{
+.card_container{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -72,6 +110,7 @@ export default {
       margin: 100px 12.5% 0 12.5%;
       display: grid;
   }
+
 
 
  

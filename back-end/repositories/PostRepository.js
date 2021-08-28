@@ -21,7 +21,12 @@ class PostRepository {
     
     async create(data){
         try {
+
+            console.log(data)
+
             const createdId = await this.storage.create(data)
+
+            console.log(createdId)
 
             if(!createdId) throw new Error('Error creating new post')
 
