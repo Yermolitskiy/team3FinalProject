@@ -27,7 +27,6 @@
 
 .card{
     margin-bottom: 2rem;
-    position: relative;
     overflow: hidden;
     background-color: lightblue;
     display: flex;
@@ -35,10 +34,7 @@
     align-items: center;
 }
 
-.card h1{
-    position: relative;
-    z-index: 2;
-}
+
 
 .card img{
     position: absolute;

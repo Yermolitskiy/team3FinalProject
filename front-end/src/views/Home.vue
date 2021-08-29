@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Accenture Bootcamp logo" src="../assets/logo.jpg">
+    <img alt="Accenture Bootcamp logo" id="logo" src="../assets/logo.jpg">
 
 
     <div class="card_container" :style="gridStyle" v-if="!loading && Array.isArray(postsData)">
@@ -91,6 +91,10 @@ export default {
 </script>
 
 <style scoped>
+
+#logo{
+  margin:3rem 0 5rem 0;
+}
 
 .hovered{
   background-color: skyblue;
