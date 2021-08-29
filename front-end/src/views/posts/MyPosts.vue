@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex_column_container">
 
 
     <!-- delete modal window -->
@@ -17,9 +17,7 @@
     <!-- delete modal window -->
 
     <!-- simple text loading status -->
-        <div class="loader" v-if="loading">
-            ...Loading
-        </div>
+        <loader/>
 
  
         <div v-if="message">
@@ -42,8 +40,8 @@
                     <!-- :date="article.publicationDate.split('T')[0]  + ' ' + article.publicationDate.split('T')[1].split('.')[0]" -->
 
                     <div class="button_wrapper">
-                        <button @click="$router.push({name:'editPost' , params:{id:article.id}})">Click to Navigate</button>
-                        <button @click="showModal(article.id)" >Delete</button>
+                        <article-button color="#4ac793" @click="$router.push({name:'editPost' , params:{id:article.id}})">Edit</article-button>
+                        <article-button color="#cf5a4a" @click="showModal(article.id)" >Delete</article-button>
                     </div>
                 </div>
            </div>
@@ -53,8 +51,8 @@
                     :img="myPosts.postImage" :author="myPosts.author" :date="myPosts.publicationDate.split('T')[0]"/>
 
                  <div class="button_wrapper">
-                        <button @click="$router.push({name:'editPost' , params:{id:myPosts.id}})">Edit</button>
-                        <button @click="showModal(myPosts.id)" >Delete</button>
+                        <article-button color="#4ac793" @click="$router.push({name:'editPost' , params:{id:myPosts.id}})">Edit</article-button>
+                        <article-button color="#cf5a4a" @click="showModal(myPosts.id)" >Delete</article-button>
                 </div>
            </div>
            <div v-else>
@@ -121,7 +119,8 @@ import {postMutationsIds} from '../../store/postModule/mutations'
         computed:{
             ...mapState({
                 myPosts: state => state.post.userPosts,
-                message: state => state.post.message
+                message: state => state.post.message,
+                loading: state => state.post.postsLoading
                 })
         },
 
@@ -163,8 +162,5 @@ import {postMutationsIds} from '../../store/postModule/mutations'
     margin:10px 0 10px 0;
 }
 
-.observer{
-    height:30px;
-    background:gray;
-}
+
 </style>

@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="flex_column_container">
         <div v-if="error"> {{error}} </div>
         <div v-else-if="message"> {{message}} </div>
 
-        <custom-form @onSubmit="createPost" formType="postForm">
+        <custom-form @onSubmit="createPost" :withImage="true" formType="postForm">
             <template #header>
                 New Post
             </template>
@@ -45,11 +45,6 @@ import {postMutationsIds} from '../../store/postModule/mutations'
 
 <style  scoped>
 
-  div{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
+
 
 </style>

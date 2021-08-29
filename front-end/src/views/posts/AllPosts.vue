@@ -1,13 +1,13 @@
 <template>
-    <div>
+    <div class="flex_column_container">
 
         <!-- single post view -->
        <router-view/>
         <!-- single post view -->
 
 
-         <div class="loader" v-if="loading && $route.name==='AllPosts'">
-            ...Loading
+         <div v-if="$route.name==='AllPosts'">
+             <loader/>
         </div>
 
         <div  v-if="!loading && $route.name==='AllPosts'">
@@ -60,7 +60,8 @@ import ArticleCard from '../../components/ArticleCard.vue'
                     {id:5 , author:'Kendrick Lamar' ,  title:'Some title 5' ,body:'Be me shall purse my ought times. Joy years doors all would again rooms these. Solicitude announcing as to sufficient my. No my reached suppose proceed pressed perhaps he.',date:'22.02.2021'},
                     {id:6 , author:'Josh Bush' , title:'Some title 6' , body:'Eagerness it delighted pronounce repulsive furniture no. Excuse few the remain highly feebly add people manner say. It high at my mind by roof. No wonder worthy in dinner. ' , date:'14.03.2021'}
                 ],
-                hover:false
+                hover:false,
+                
 
 
                
@@ -80,7 +81,7 @@ import ArticleCard from '../../components/ArticleCard.vue'
         computed:{
             ...mapState({
                 articleData: state => state.post.posts,
-                loading: state => state.post.postsLoading
+                loading:state => state.post.postsLoading
             })
         },
         mounted(){
@@ -110,8 +111,5 @@ import ArticleCard from '../../components/ArticleCard.vue'
 .article_list > div{
     margin:3rem 0 3rem 0;
 }
-.observer{
-    height:30px;
-    background:gray;
-}
+
 </style>

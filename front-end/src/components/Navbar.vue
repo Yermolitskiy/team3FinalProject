@@ -2,84 +2,63 @@
     <div>
           <div v-if="type === 'mobile'" >
 
-          <nav class="main-nav" v-if="!$store.state.isNavOpen">
-              <div>
-                my.company
-              </div>
-            <Burger></Burger>
-          </nav>
-          <nav v-else-if="$store.state.isNavOpen" class="main-nav" @click="hideNavbar">
-              <div>
-                my.company
-              </div>
+          <nav class="main-nav" v-if="!isNavOpen">
+              <div class="logo_block"></div>
             <Burger></Burger>
           </nav>
 
+          <nav v-else-if="isNavOpen" class="main-nav" @click="hideNavbar">
+            <div class="logo_block"></div>
+            <Burger></Burger>
+          </nav>
 
           <SideBar>
-               <ul class="sidebar-panel-nav" v-if="$store.state.auth.isLogged" >
-                    <li><router-link to="/">Home</router-link></li>
-                    <li><router-link to="/about">About</router-link></li>
-                    <li><router-link to="/posts">All posts</router-link></li>
-                    <li><router-link to="/myPosts">My posts</router-link></li>
-                    <li><router-link to="/createPost">Create post</router-link></li>
-                    <li><button @click="logout"> Sign out </button></li>
-                </ul>
-                <ul v-else class="sidebar-panel-nav" >
-                  <li><router-link to="/">Home</router-link></li>
-                  <li><router-link to="/register">Registration</router-link></li>
-                  <li><router-link to="/login">Login</router-link></li>
-                </ul>
+            <div class="sidebar-panel-nav" >
+                <div>
+                    <router-link to="/">Home</router-link>
+                    <router-link to="/posts">All posts</router-link>
+                </div>
+                <div>
+                    <router-link to="/myPosts" v-if="isLogged">My posts</router-link>
+                    <router-link to="/createPost" v-if="isLogged">Create post</router-link>
+                    <button @click="logout" v-if="isLogged"> Sign out </button>
+                    <router-link to="/login " v-if="!isLogged">Login</router-link>
+                    <router-link to="/register" v-if="!isLogged">Registration</router-link>
+                </div>
+            </div>    
           </SideBar>
-
       </div>
 
       <div v-else-if="type === 'tablet' || type === 'desktop'">
         <div class="main-nav"  >
-          
+          <!-- top navbar left-side -->
           <div class="left_nav_wrapper">
             <div class="logo_block"></div>
-            <router-link id="left_nav_link" to="/">Home</router-link> 
-            <router-link id="left_nav_link" to="/posts">All posts</router-link>
+            <router-link  to="/">Home</router-link> 
+            <router-link  to="/posts">All posts</router-link>
           </div>
-
+        <!-- top navbar right side -->
           <div class="iconbutton_wrapper">
-       
-              <icon-base
-                v-if="$store.state.auth.isLogged"
-                @click="$router.push('/createPost')"
-                width="30"
-                height="30"
-                icon-name="add post"
-            >
-              <add-icon/>
+            <icon-base v-if="isLogged" @click="$router.push('/createPost')" width="30" height="30" icon-name="add post">
+                <add-icon/>
             </icon-base>
 
-            <icon-base
-              width="30"
-              height="30"
-              icon-name="user"
-              @click="toggleUserDropdown"
-            >
+            <icon-base  width="30"  height="30" icon-name="user" @click="toggleUserDropdown" :style="!isLogged ? 'margin-left:3rem;':''" > 
               <user-icon />
             </icon-base>
-            <transition name="slide_vertical">
-              <div class="usr" v-if="showDropdownMenu" >
-
-                <router-link id="dropdown_link" to="/myPosts" v-if="$store.state.auth.isLogged">My posts</router-link>
-                <button @click="logout" v-if="$store.state.auth.isLogged"> Sign out </button>
-                <router-link id="dropdown_link" to="/login" v-if="!$store.state.auth.isLogged">Sign in</router-link>
-                <router-link id="dropdown_link" to="/register" v-if="!$store.state.auth.isLogged">Sign up</router-link>
-
-              </div>
-            </transition>
+            <!-- drop down menu -->
+                <transition name="slide_vertical">
+                    <div class="dropdown_menu" v-if="showDropdownMenu" >
+                        <router-link  to="/myPosts" v-if="isLogged">My posts</router-link>
+                        <button @click="logout" v-if="isLogged"> Sign out </button>
+                        <router-link to="/login" v-if="!isLogged">Sign in</router-link>
+                        <router-link  to="/register" v-if="!isLogged">Sign up</router-link>
+                    </div>
+                </transition>
           </div>
         </div>
-       
       </div>
-
     </div>
-       
 </template>
 
 <script>
@@ -88,34 +67,37 @@ import SideBar from '@/components/UI/Sidebar.vue'
 import useBreakPoints from '@/hooks/useBreakPoints'
 import AddIcon from '@/components/Icons/AddIcon.vue'
 import UserIcon from '@/components/Icons/UserIcon.vue'
-import {mapActions} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 
-    export default {
-        components:{  Burger , SideBar , AddIcon , UserIcon  },
-         data(){
+export default {
+
+  components:{  Burger , SideBar , AddIcon , UserIcon  },
+  data(){
     return{
       showDropdownMenu:true
     }
   },
- 
-  
+  computed:{
+    ...mapState({
+        isLogged:state => state.auth.isLogged,
+        isNavOpen:state => state.isNavOpen
+
+    })
+  },
   methods:{
     toggleUserDropdown(){
       this.showDropdownMenu = !this.showDropdownMenu
     },
     ...mapActions({ handleLogout:'auth/logout'}),
-    
-        logout(){
+      logout(){
         this.handleLogout()
         this.$router.replace('/login')
         },
-            hideNavFromTopBar(){
-            if(this.$store.state.isNavOpen){
-                this.hideNavbar()
+        hideNavFromTopBar(){
+            if(this.$store.state.isNavOpen) this.hideNavbar()
             }
-            }
-        },
-        setup(){
+      },
+    setup(){
             const {type} = useBreakPoints()
             return {type}
         },
@@ -123,18 +105,32 @@ import {mapActions} from 'vuex'
 </script>
 
 <style >
-#nav {
-  padding: 30px;
+
+
+.sidebar-panel-nav{
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+.sidebar-panel-nav div {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+  }
+.sidebar-panel-nav button{
+ background: none;
+ color:rgb(124, 107, 181);
+ border: none;
+ font-size: 15px;
+ padding:10px 5px 5px 0px;
+ text-align: left;
 }
-
-
-
-@media only screen and (min-width:768px) {
-  .iconbutton_wrapper{
-    margin-right: 3rem;
-    display: flex;
-    justify-content: space-evenly;
-    width:10rem
+.sidebar-panel-nav a {
+      text-decoration:none;
+      padding:10px 5px 5px 0px;
   }
 
   .logo_block{
@@ -143,14 +139,29 @@ import {mapActions} from 'vuex'
     height:30px;
     background:rgb(230, 225, 228) ;
   }
+  
 
-  #left_nav_link{
+@media only screen and (min-width:765px) {
+
+  
+
+  .iconbutton_wrapper{
+    margin-right: 3rem;
+    display: flex;
+    justify-content: space-evenly;
+    width:10rem
+  }
+
+  
+
+   .left_nav_wrapper a{
     color:rgb(124, 107, 181);
     margin-top:10px;
     text-decoration: none;
     font-weight: 500;
     cursor:pointer;
   }
+
 
   .left_nav_wrapper{
     margin-left: 3rem;
@@ -161,7 +172,7 @@ import {mapActions} from 'vuex'
 
 
 
-  .usr{
+  .dropdown_menu{
     background:rgb(230, 225, 228);
     
     width: 13rem;
@@ -173,15 +184,16 @@ import {mapActions} from 'vuex'
     justify-content: flex-start;
     align-items: flex-start;
   }
-  #dropdown_link{
+ 
+  .dropdown_menu a{
     color:rgb(124, 107, 181);
     margin:8px 0 5px 15px;
     text-decoration: none;
     font-weight: 500;
     cursor:pointer;
-    
   }
-  .usr button{
+  
+  .dropdown_menu button{
     border:none;
     background:none;
     margin:8px 0 5px 15px;
@@ -203,11 +215,26 @@ import {mapActions} from 'vuex'
   .left_nav_wrapper{
     margin-left: 10rem;
   }
+
+  .dropdown_menu{
+    right:13rem;
+  }
 }
 
 
+ a.router-link-exact-active 
+{
+  color: #42b983;
+}
 
-.slide_vertical-enter-from{
+ .main-nav {
+   display: flex;
+   justify-content: space-between;
+   padding: 1rem 1.8rem;
+   position: relative;
+ }
+
+ .slide_vertical-enter-from{
   opacity:0;
   top:50px;
   
@@ -226,41 +253,4 @@ import {mapActions} from 'vuex'
   opacity:0;
   transition: all 250ms ease-in;
 }
-
-
-
-
-
-
-
-.main-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-  margin-left: 10px;
-}
-
-.main-nav a.router-link-exact-active {
-  color: #42b983;
-}
-
-
-
- .main-nav {
-   display: flex;
-   justify-content: space-between;
-   padding: 1rem 1.8rem;
-   position: relative;
- }
-
- ul.sidebar-panel-nav {
-   list-style-type: none;
- }
-
- ul.sidebar-panel-nav > li > a {
-   color: #fff;
-   text-decoration: none;
-   font-size: 1rem;
-   display: block;
-   padding-bottom: 0.5em;
- }
 </style>

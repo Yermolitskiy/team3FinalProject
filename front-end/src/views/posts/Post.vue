@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex_column_container">
         
          <!-- eslint-disable -->
         <my-dialog v-model:show="modalVisible" >
@@ -18,7 +18,7 @@
 
             <div class="post_wrapper" v-if="$route.name === 'editPost' && !loading && selectedPost">
 
-                  <custom-form @onSubmit="updatePost" :initialData="formData"  :formType="'postForm'">
+                  <custom-form @onSubmit="updatePost" :initialData="formData" :withImage="false" formType="postForm">
                     <template #header>
                         Edit Post
                     </template>
@@ -27,7 +27,7 @@
                     </template>
                 </custom-form>
 
-                <button-1 style="background:red" @click="$router.go(-1)" >Cancel</button-1>
+                <button-1 class="cancel_button" @click="$router.go(-1)" >Cancel</button-1>
             </div>
 
 
@@ -43,8 +43,8 @@
                 
 
                 <div class="button_wrapper" v-if="selectedPost && ofCurrentUser">
-                    <button @click="$router.push({name:'editPost' , params:{id:$route.params.id}})">Edit</button>
-                    <button @click="showModal()" >Delete</button>
+                    <article-button color="#4ac793" @click="$router.push({name:'editPost' , params:{id:$route.params.id}})">Edit</article-button>
+                    <article-button color="#cf5a4a" @click="showModal()" >Delete</article-button>
                 </div>
 
             </div>
@@ -150,6 +150,27 @@ import {postMutationsIds} from '../../store/postModule/mutations'
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.cancel_button{
+        background-color: red;
+}
+
+@media only screen and (min-width: 375px) {
+    .cancel_button{
+        width:19rem;
+ }   
+ @media only screen and (min-width:768px){
+     .cancel_button{
+         width:18rem;
+     }
+ }
+ @media only screen and (min-width:1440px) {
+     .cancel_button{
+         width:22rem;
+     }
+     
+ }
 }
 
 </style>

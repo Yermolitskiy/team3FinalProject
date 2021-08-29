@@ -9,7 +9,7 @@
     </div>
 
     <div v-if="validationErrors.length" class="errorMsg">
-        <ul  >
+        <ul>
           <li v-for="(validationError , i) in validationErrors" :key="'error'+i" class="error">
             {{validationError}}
           </li>
@@ -107,7 +107,7 @@
         <p>Post Image 200x150 preview</p>
         <img class="post_image_preview" :src="inputValues.postForm.postImageUrl" alt="">
       </div>
-      <button-1 style="background:green" @click.prevent="pickFile">Upload Image</button-1>
+      <button-1 v-if="withImage" style="background:green" @click.prevent="pickFile">Upload Image</button-1>
       <input type="file" style="display:none" ref="fileInput" accept="image/* , .jpg , .png" @change="onFilePicked" >
 
 
@@ -126,7 +126,6 @@
       >
         <slot name="submit_button"> Submit </slot>
       </button-1>
-  
     </div>
 
     
@@ -174,6 +173,10 @@ export default {
     initialData:{
       type:Object,
       default:undefined
+    },
+    withImage:{
+      type:Boolean,
+      default:true
     }
   },
 
@@ -202,7 +205,13 @@ export default {
 
       if(!errors.length){
         this.validationErrors = []
-        this.$emit('onSubmit' , this.inputValues[this.formType] )
+        if(this.withImage){
+          this.$emit('onSubmit' , this.inputValues[this.formType] )
+          }else{
+            delete this.inputValues['postForm']['postImage']
+            delete this.inputValues['postForm']['postImageUrl']
+            this.$emit('onSubmit' , this.inputValues[this.formType] )
+        }
         //seting back to empty form
         this.inputValues = {
                         register: {

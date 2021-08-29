@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex_column_container">
          <div v-if="error">
             {{error}}
         </div>
@@ -22,17 +22,10 @@ import {authMutationsIds} from '../../store/authModule/mutations'
     export default {
         methods:{
             register(data){
-                console.log(data)
                 //we don't want to send password confirm because in db there is no such field
                 delete data['password_confirm']
-                
-                this.handleRegister(data).then(() => {
-                    if(!this.error){
-                        this.$router.replace('/')
-                   }
-                })
+                this.handleRegister(data)
             },
-
             ...mapMutations({setError:'auth/'+authMutationsIds.SET_ERROR}),
             ...mapActions({
                 handleRegister:'auth/register'
@@ -44,17 +37,12 @@ import {authMutationsIds} from '../../store/authModule/mutations'
                  error: state => state.auth.error
              }),
         }
-        
     }
 </script>
 
 <style scoped>
 
-div{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+
 div form{
     width:40rem;
 }

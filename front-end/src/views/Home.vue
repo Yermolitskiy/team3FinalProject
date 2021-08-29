@@ -1,8 +1,8 @@
 <template>
   <div class="home">
+
     <img alt="Accenture Bootcamp logo" id="logo" src="../assets/logo.jpg">
-
-
+    <loader/>
     <div class="card_container" :style="gridStyle" v-if="!loading && Array.isArray(postsData)">
       <post-card v-for="post in postsData"
         :img="post.postImage" 
@@ -22,9 +22,7 @@
       <h1>No posts</h1>
     </div>
 
-    <div v-if="loading">
-      ...Loading
-    </div>
+   
 
   </div>
 </template>
@@ -69,7 +67,8 @@ export default {
  
   methods:{
     ...mapMutations({
-      setLimit:'post/'+postMutationsIds.SET_LIMIT
+      setLimit:'post/'+postMutationsIds.SET_LIMIT,
+      setPage:'post/' + postMutationsIds.SET_PAGE
     }),
     ...mapActions({
       fetchPosts:'post/'+actionsIds.FETCH_POSTS
@@ -85,6 +84,7 @@ export default {
   },
   beforeUnmount(){
     this.setLimit(10)
+    this.setPage(0)
   }
  
 }

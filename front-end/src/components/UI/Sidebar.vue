@@ -50,8 +50,10 @@ import {mapState} from 'vuex'
         height: 100vh;
         z-index: 999;
         padding: 3rem 20px 1rem 20px;
-        width: 50%;
+        width: 10rem;
     }
+
+
 
 
 

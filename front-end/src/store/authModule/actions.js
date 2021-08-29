@@ -1,6 +1,7 @@
 
 import axios from '../../utils/axios'
 import {authMutationsIds} from './mutations'
+import router from '../../router/'
 
 const actions = {
     async register({commit} , data){
@@ -16,6 +17,7 @@ const actions = {
             
             commit(authMutationsIds.SET_USER , response.data.user)
             commit(authMutationsIds.SET_LOGGED , true)
+            router.push('/')
         } catch (error) {
             commit(authMutationsIds.SET_ERROR, error.response.data.error)
         }finally{

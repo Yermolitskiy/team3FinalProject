@@ -22,9 +22,10 @@ const actions = {
     async fetchPosts({commit , state} , data){
         try {
             const ofCurrentUser = data?.ofCurrentUser
-            const offset = state.page === 0 ? 0 : state.page * state.limit
+            const offset = state.page === 0 ? 0 :  state.page * state.limit
             if(!ofCurrentUser){
             commit(postMutationsIds.SET_LOADING , true);
+            commit(postMutationsIds.SET_PAGE , state.page + 1)
             // const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
             //move api url in .env later 
             const response = await axios.get('http://localhost:5000/api/posts/' , 
@@ -42,6 +43,8 @@ const actions = {
             //fetch for current user
             else{
                 commit(postMutationsIds.SET_LOADING , true)
+                commit(postMutationsIds.SET_PAGE , state.page + 1)
+
                 const response = await axios.get('http://localhost:5000/api/posts/userPosts' , {
                     params:{
                         offset , limit:state.limit
@@ -68,9 +71,10 @@ const actions = {
         try {
             const ofCurrentUser = data?.ofCurrentUser
             const offset = state.page * state.limit
+            if(state.page  < state.totalPages){
             if(!ofCurrentUser){
                 //prevents infinite repeatative scroll when post amount is less than 1 page
-                if(state.page + 1 < state.totalPages){
+                
                 commit(postMutationsIds.SET_PAGE , state.page + 1)
 
                 const response = await axios.get('http://localhost:5000/api/posts' , {
@@ -82,11 +86,11 @@ const actions = {
                 commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
                 commit(postMutationsIds.SET_POSTS , [...state.posts , ...response.data.posts])
                 commit(postMutationsIds.SET_POST_META , response.data.meta)
-            }
+            
             }
             //else fetch more user's posts
             else{
-                if(state.page + 1 < state.totalPages){
+               
                     commit(postMutationsIds.SET_PAGE , state.page + 1)
                     const response = await axios.get('http://localhost:5000/api/posts/userPosts' , {
                         params:{
@@ -96,8 +100,9 @@ const actions = {
                     commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
                     commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , ...response.data.posts])
                     commit(postMutationsIds.SET_POST_META , response.data.meta)
-                }
+                
             }
+        }
            
         } catch (error) {
             console.log(error.response.data.error)

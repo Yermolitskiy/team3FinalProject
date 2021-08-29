@@ -97,7 +97,7 @@
 <style  >
 
 
-@media only screen and (min-width:325px){
+@media only screen and (min-width:375px){
     .article_container{
         display:flex;
         flex-direction: column;

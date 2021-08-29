@@ -31,4 +31,17 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
+.flex_column_container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top:5rem;
+}
+
+.observer{
+    height:30px;
+}
+
 </style>

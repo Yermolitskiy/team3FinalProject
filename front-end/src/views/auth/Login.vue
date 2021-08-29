@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex_column_container">
 
         <div v-if="error">
             {{error}}
@@ -12,6 +12,11 @@
                     Sign in
             </template>
         </custom-form>
+
+
+        
+
+
     </div>
 </template>
 
@@ -47,13 +52,7 @@ import {authMutationsIds} from '../../store/authModule/mutations'
 
 <style scoped>
 
-    div{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
+   
     
 
 
