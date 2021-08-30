@@ -8,20 +8,23 @@ module.exports = class MySQLStorage extends BaseStorage{
         this._table = options.table
     }
     
-    async findBy(criteria){
+    async findBy(criteria , queryOptions){
         try {
             const keys = Object.keys(criteria)
             let query
 
             //this literal template puts all key/value pairs in one query whether single option or multiple options are passed
             const simpleSelectQuery = `SELECT * FROM ${this._table} WHERE ${keys.length > 1 ? `${keys.flatMap(key => ` \`${key}\` = \` ${criteria[key]}\` `).join(' AND ')} ` 
-                        : ` \`${keys[0]}\` = '${criteria[keys[0]]}' ` }`
+                        : ` \`${keys[0]}\` = '${criteria[keys[0]]}' ` }
+                        ${queryOptions?.order ? `ORDER BY ${queryOptions?.order} ${queryOptions?.orderDirection ? `${queryOptions?.orderDirection}` : 'DESC'}` : ''}`
 
             //seperate query for post because it needs extra join and concat clauses to swap numeric id with user name and surname
             const innerJoinPostsQuery = `SELECT CONCAT(name , " " , surname) as author , posts.id , posts.body , posts.title , posts.publicationDate , posts.postImage FROM posts 
                     INNER JOIN users ON posts.author = users.id 
                     WHERE ${keys.length > 1 ? `${keys.flatMap(key => ` posts.${key} = '${criteria[key]}' `).join(' AND ')}` 
-                          : ` posts.${keys[0]} = '${criteria[keys[0]]}' `} `
+                          : ` posts.${keys[0]} = '${criteria[keys[0]]}' `} 
+                          ORDER BY posts.${queryOptions?.order ? `${queryOptions?.order}` : 'publicationDate'} ${queryOptions?.orderDirection ? `${queryOptions?.orderDirection}` : 'DESC'} 
+                          `
 
             
             
@@ -55,11 +58,14 @@ module.exports = class MySQLStorage extends BaseStorage{
     async findAll(queryOptions){
         try {
 
-            const simpleSelectQuery = `SELECT * FROM ${this._table} ${queryOptions.order ? ` ORDER BY ${queryOptions.order}` : ''}`
+            const simpleSelectQuery = `SELECT * FROM ${this._table}
+             ${queryOptions.order ? ` ORDER BY ${queryOptions.order}` : ''} ${queryOptions.orderDirection ? `${queryOptions.orderDirection}` : ''}`
 
             //seperate query for post because it needs extra join and concat clauses to swap numeric id with user name and surname
-            const innerJoinPostsQuery = `SELECT CONCAT(name , " " , surname) as author , posts.id , posts.body , posts.title , posts.publicationDate , posts.postImage FROM posts 
-                    INNER JOIN users ON posts.author = users.id  ${queryOptions.order ? ` ORDER BY ${queryOptions.order}` : ''}`
+            const innerJoinPostsQuery = `SELECT CONCAT(name , " " , surname) as author , p.id , p.body , p.title , p.publicationDate , p.postImage FROM posts p 
+                    INNER JOIN users ON p.author = users.id  
+                    ${queryOptions.order ? ` ORDER BY p.${queryOptions.order}` : 'ORDER BY p.publicationDate'} 
+                    ${queryOptions.orderDirection ? `${queryOptions.orderDirection}` : 'DESC'}`
 
             let query
             if(this._table == 'posts'){query = innerJoinPostsQuery}

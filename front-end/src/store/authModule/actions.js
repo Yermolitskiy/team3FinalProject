@@ -6,7 +6,6 @@ import router from '../../router/'
 const actions = {
     async register({commit} , data){
         try {
-            // console.log(process.env.VUE_APP_API_URL)
             commit(authMutationsIds.SET_LOADING , true)
             commit(authMutationsIds.SET_ERROR , null)
 

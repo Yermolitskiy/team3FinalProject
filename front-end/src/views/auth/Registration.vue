@@ -34,9 +34,8 @@
 
 <script>
 import { mapActions ,  mapMutations, mapState  } from 'vuex'
-import {authMutationsIds} from '../../store/authModule/mutations'
 import validator from '@/utils/formValidator.js'
-// import {authMutationsIds} from '@store/authModule/mutations'
+import {authMutationsIds} from '@/store/authModule/mutations'
     export default {
         data(){
             return{

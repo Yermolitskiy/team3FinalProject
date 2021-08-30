@@ -19,20 +19,26 @@ export const actionsIds = {
 }
 
 const actions = {
+
+
+
     async fetchPosts({commit , state} , data){
         try {
+           
             const ofCurrentUser = data?.ofCurrentUser
             const offset = state.page === 0 ? 0 :  state.page * state.limit
             if(!ofCurrentUser){
             commit(postMutationsIds.SET_LOADING , true);
             commit(postMutationsIds.SET_PAGE , state.page + 1)
-            // const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
-            //move api url in .env later 
-            const response = await axios.get('http://localhost:5000/api/posts/' , 
+            
+
+            const response = await axios.get('/api/posts/' , 
                 {params: 
                     {
                         offset,
-                        limit:state.limit
+                        limit:state.limit,
+                        order:data?.order,
+                        orderDirection:data?.orderDirection
                     }})
                 
            
@@ -45,9 +51,11 @@ const actions = {
                 commit(postMutationsIds.SET_LOADING , true)
                 commit(postMutationsIds.SET_PAGE , state.page + 1)
 
-                const response = await axios.get('http://localhost:5000/api/posts/userPosts' , {
+                const response = await axios.get('/api/posts/userPosts' , {
                     params:{
-                        offset , limit:state.limit
+                        offset , limit:state.limit ,
+                        order:data?.order,
+                        orderDirection:data?.orderDirection
                     }
                 })
                
@@ -77,9 +85,11 @@ const actions = {
                 
                 commit(postMutationsIds.SET_PAGE , state.page + 1)
 
-                const response = await axios.get('http://localhost:5000/api/posts' , {
+                const response = await axios.get('/api/posts' , {
                     params:{
-                        offset , limit:state.limit
+                        offset , limit:state.limit ,
+                        order:data?.order,
+                        orderDirection:data?.orderDirection
                     }
                 })
         
@@ -92,7 +102,7 @@ const actions = {
             else{
                
                     commit(postMutationsIds.SET_PAGE , state.page + 1)
-                    const response = await axios.get('http://localhost:5000/api/posts/userPosts' , {
+                    const response = await axios.get('/api/posts/userPosts' , {
                         params:{
                             offset , limit:state.limit
                         }
@@ -119,25 +129,21 @@ const actions = {
 
         try {
          
+            console.log(data)
 
             commit(postMutationsIds.SET_ERROR , null)
 
-            // id is recieved from token payload instead
-            // const authorId =  rootState.auth.user.id
-            const now = new Date()
-            const publicationDate = now.toISOString().split('T')[0]
-
-            
+            // id is recieved from token payload 
             //turns proxy object into plain js object and returning data property
             const postData = {...JSON.parse(JSON.stringify(data))}.data
             delete postData['postImageUrl']
             
             
-            const image = data.data.postImage
+            const image = data?.data?.postImage
             if(!image){
                 delete postData['postImage']
                 // repalce string path in segregate .env later
-                const response = await axios.post('http://localhost:5000/api/posts/' , {...postData ,  publicationDate})
+                const response = await axios.post('/api/posts/' , {...postData })
                 commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , response.data])
                 commit(postMutationsIds.SET_MESSAGE , 'Post is successfuly created')
             }
@@ -150,10 +156,9 @@ const actions = {
 
                 formData.append('title' , postData.title)
                 formData.append('body' , postData.body)
-                formData.append('publicationDate' , publicationDate)
                 formData.append('postImage' , image, image.name)
     
-                const response = await axios.post('http://localhost:5000/api/posts/' , formData )
+                const response = await axios.post('/api/posts/' , formData )
                 commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , response.data])
                 commit(postMutationsIds.SET_MESSAGE , 'Post is successfuly created')
             }
@@ -171,7 +176,7 @@ const actions = {
     async updatePost({commit } , {data , id}){
 
         try {
-            await axios.put(`http://localhost:5000/api/posts/${id}` , {...data})
+            await axios.put(`/api/posts/${id}` , {...data})
             commit(postMutationsIds.CHANGE_USER_POST , {data , id})
             commit(postMutationsIds.SET_MESSAGE , 'Post succesfuly updated')
             router.push('/myPosts')
@@ -183,7 +188,7 @@ const actions = {
 
     },
 
-    //likely to change on getPost(context , {ofCurrentUser : boolean})
+    
     async getPost({commit} , data){
             try {
                 const ofCurrentUser = data?.ofCurrentUser
@@ -192,12 +197,12 @@ const actions = {
               
                 if(!ofCurrentUser){
                     commit(postMutationsIds.SET_LOADING , true)
-                    const response = await axios.get(`http://localhost:5000/api/posts/${id}`)
+                    const response = await axios.get(`/api/posts/${id}`)
                     commit(postMutationsIds.SELECT_POST , response.data.posts)
                     commit(postMutationsIds.SET_POST_META , response.data.meta)
                 }else{
                     commit(postMutationsIds.SET_LOADING , true)
-                    const response = await axios.get(`http://localhost:5000/api/posts/userPosts/${id}`)
+                    const response = await axios.get(`/api/posts/userPosts/${id}`)
                     commit(postMutationsIds.SELECT_POST , response.data.posts)
 
                     //currently is not used
@@ -218,7 +223,7 @@ const actions = {
     async removePost({commit} , postId){
         try {
             commit(postMutationsIds.REMOVE_POST , postId)
-            await axios.delete(`http://localhost:5000/api/posts/userPosts/${postId}`)
+            await axios.delete(`/api/posts/userPosts/${postId}`)
             commit(postMutationsIds.SET_MESSAGE , 'Post Succesfully deleted')
 
         } catch (error) {

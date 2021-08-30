@@ -39,11 +39,11 @@
           </div>
         <!-- top navbar right side -->
           <div class="iconbutton_wrapper">
-            <icon-base v-if="isLogged" @click="$router.push('/createPost')" width="30" height="30" icon-name="add post">
+            <icon-base v-if="isLogged" @click="$router.push('/createPost')" width="30" height="30" icon-name="Add post">
                 <add-icon/>
             </icon-base>
 
-            <icon-base  width="30"  height="30" icon-name="user" @click="toggleUserDropdown" :style="!isLogged ? 'margin-left:3rem;':''" > 
+            <icon-base  width="30"  height="30" icon-name="User" @click="toggleUserDropdown" :style="!isLogged ? 'margin-left:3rem;':''" > 
               <user-icon />
             </icon-base>
             <!-- drop down menu -->
@@ -74,7 +74,7 @@ export default {
   components:{  Burger , SideBar , AddIcon , UserIcon  },
   data(){
     return{
-      showDropdownMenu:true
+      showDropdownMenu:false
     }
   },
   computed:{
@@ -106,6 +106,9 @@ export default {
 
 <style >
 
+.iconbutton_wrapper svg{
+  cursor: pointer;
+}
 
 .sidebar-panel-nav{
         height: 80%;
@@ -174,7 +177,7 @@ export default {
 
   .dropdown_menu{
     background:rgb(230, 225, 228);
-    
+    padding:10px 5px 15px 5px;
     width: 13rem;
     position: absolute;
     right:6.3rem;

@@ -29,9 +29,23 @@
 
        <div class="article_list" v-if="!loading && ($route.name === 'myPosts')">
 
-            <div>
-                Option to sort and search 
-            </div>
+                     <custom-select v-if="Array.isArray(myPosts) && myPosts">
+                        <select @change="changeOrder" v-model="orderOption" name="order" id="order">
+                            <option disabled value="">Choose order</option>
+                            <option value="publicationDate">Publication Date</option>
+                            <option value="title">Title </option>
+                            <!-- <option value="author">Author </option> -->
+                        </select>
+
+                        <icon-base width="25px" height="25px" @click="orderAscending">
+                            <arrow-up-icon/>
+                        </icon-base>
+
+                    
+                        <icon-base width="25px" height="25px" @click="orderDescending">
+                            <arrow-down-icon/>
+                        </icon-base>
+                     </custom-select>
 
            <div v-if="Array.isArray(myPosts) && myPosts">
                 <div v-for="article in myPosts" :key="'article-'+article.id" >
@@ -39,7 +53,7 @@
                     :body="article.body" :title="article.title" 
                     :img="article.postImage"
                     :author="article.author"
-                    :date="article.publicationDate.split('T')[0]"
+                    :date="new Date(Date.parse(article.publicationDate)).toLocaleString()"
                     :class="{hovered:hover === article.id}" @mouseover="hover = article.id" @mouseleave="hover = false"
                     @click="$router.push({name:'myPost' , params:{id:article.id}})"
                     />
@@ -55,7 +69,9 @@
            <div v-else-if="!Array.isArray(myPosts) && Object.entries(myPosts).length">
                <article-card 
                     :body="myPosts.body" :title="myPosts.title"
-                    :img="myPosts.postImage" :author="myPosts.author" :date="myPosts.publicationDate.split('T')[0]"/>
+                    :img="myPosts.postImage" :author="myPosts.author" 
+                    :date="new Date(Date.parse(myPosts.publicationDate)).toLocaleString()"
+                    />
 
                  <div class="button_wrapper">
                         <article-button color="#4ac793" @click="$router.push({name:'editPost' , params:{id:myPosts.id}})">Edit</article-button>
@@ -72,12 +88,10 @@
         <div class="observer" v-intersection="fetchMorePosts" v-if="!loading && myPosts && ($route.name === 'myPosts')" ></div>
 
         <!-- displays single post/post edit form depending on route name -->
-        <!-- currently tested and implemented only edit view -->
         <!-- /myPosts/:id/edit -->
         <!-- /myPosts/:id -->
         <router-view :key="$route.fullPath"/>
         <!-- /myPosts/:id -->
-        <!-- /myPosts/:id/edit -->
         <!-- displays single post/post edit form depending on route name -->
 
     </div>
@@ -85,16 +99,21 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
-import ArticleCard from '../../components/ArticleCard.vue'
-import {actionsIds} from '../../store/postModule/actions'
-import {postMutationsIds} from '../../store/postModule/mutations'
+import ArticleCard from '@/components/ArticleCard.vue'
+import ArrowUpIcon from '@/components/Icons/ArrowUp.vue'
+import ArrowDownIcon from '@/components/Icons/ArrowDown.vue'
+import {actionsIds} from '@/store/postModule/actions'
+import {postMutationsIds} from '@/store/postModule/mutations'
+import CustomSelect from '@/components/UI/CustomSelect.vue'
     export default {
-  components: { ArticleCard },
+  components: { ArticleCard , ArrowUpIcon ,ArrowDownIcon, CustomSelect },
         data(){
             return{
                 modalVisible:false,
                 postId:undefined,
-                hover:false
+                hover:false,
+                orderOption:'',
+                orderDirection:''
             }
         },
         methods:{
@@ -108,8 +127,27 @@ import {postMutationsIds} from '../../store/postModule/mutations'
                 this.modalVisible = false
             },
             fetchMorePosts(){
-                this.handleFetchMorePosts({ofCurrentUser:true})
+                this.handleFetchMorePosts({ofCurrentUser:true , order:this.orderOption , orderDirection:this.orderDirection})
             },
+             changeOrder(){
+              this.setPage(0)
+              this.fetchPosts({ofCurrentUser:true ,order:this.orderOption})
+            },
+            orderAscending(){
+                if(this.orderOption){
+                    this.setPage(0)
+                    this.orderDirection = 'ASC'
+                    this.fetchPosts({ofCurrentUser:true ,order:this.orderOption , orderDirection:this.orderDirection})
+                }
+            },
+            orderDescending(){
+                if(this.orderOption){
+                    this.setPage(0)
+                    this.orderDirection = 'DESC'
+                    this.fetchPosts({ofCurrentUser:true ,order:this.orderOption , orderDirection:this.orderDirection})
+                }
+            },
+            
             ...mapActions({
                 fetchPosts : 'post/' + actionsIds.FETCH_POSTS,
                 handleFetchMorePosts: 'post/' + actionsIds.FETCH_MORE_POSTS,
@@ -168,6 +206,12 @@ import {postMutationsIds} from '../../store/postModule/mutations'
 }
 .modal_delete :first-child{
     margin:10px 0 10px 0;
+}
+
+.select_box{
+    align-self: flex-start;
+    display: flex;
+    margin-right:3.5rem;
 }
 
 

@@ -40,6 +40,8 @@ export default {
         margin-top:5rem;
 }
 
+
+
 .observer{
     height:30px;
 }

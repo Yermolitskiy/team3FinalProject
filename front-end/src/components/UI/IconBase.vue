@@ -6,7 +6,7 @@
     :aria-labelledby="iconName" 
     role="presentation"
   >
-    <title :id="iconName" lang="en">{{iconName}} icon</title>
+    <title :id="iconName" lang="en">{{iconName}}</title>
     <g :fill="iconColor">
       <slot />
     </g>
@@ -23,11 +23,11 @@ export default {
     },
     width: {
       type: [Number, String],
-      default: 18
+      default: 20
     },
     height: {
       type: [Number, String],
-      default: 18
+      default: 20
     },
     iconColor: {
       type: String,

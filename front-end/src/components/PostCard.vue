@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <img :src="img" alt="">
+        <!-- <img :src="img" alt=""> -->
         <h1> {{title}} </h1>
     </div>
 </template>
@@ -12,9 +12,9 @@
                 type:String,
                 default:'Article text'
             },
-            img:{
-                type:String
-            }
+            // img:{
+            //     type:String
+            // }
         },
        
     

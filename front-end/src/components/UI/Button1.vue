@@ -21,6 +21,7 @@
         height: 1.8rem;
         border: none;
         margin:5px 0 5px 0;
+        cursor: pointer;
     }
 
 @media only screen and (min-width:768px) {

@@ -91,11 +91,10 @@ export default router
 
 router.beforeEach((to , from , next) => {
 
-  console.log('user is logged?' , userState.isLogged)
 
   if(to.matched.some(route => route.meta.quest)){
 
-    if(localStorage.getItem('token') == null){
+    if(localStorage.getItem('token') == null && !userState.isLogged){
       next()
     }else{
       next('/')
@@ -103,7 +102,7 @@ router.beforeEach((to , from , next) => {
   }
   else if(to.matched.some(route => route.meta.requiresAuth)) {
    
-      if(localStorage.getItem('token') !== null ){
+      if(localStorage.getItem('token') !== null && userState.isLogged ){
         next()
       }else{
         next('/')

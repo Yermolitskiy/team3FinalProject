@@ -6,6 +6,7 @@ import IconBase from './IconBase.vue'
 import ArticleButton from './ArticleButton.vue'
 import Loader from './Loader.vue'
 import FormWithSlots from './FormWithSlots.vue'
+import CustomSelect from './CustomSelect.vue'
 
 export default [
     Form  ,
@@ -14,4 +15,5 @@ export default [
     IconBase ,
     ArticleButton ,
     FormWithSlots,
+    CustomSelect,
     Loader]

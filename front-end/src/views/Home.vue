@@ -33,8 +33,8 @@
 
 import PostCard from '@/components/PostCard'
 import { mapActions, mapMutations, mapState } from 'vuex'
-import {postMutationsIds} from '../store/postModule/mutations'
-import {actionsIds} from '../store/postModule/actions'
+import {postMutationsIds} from '@/store/postModule/mutations'
+import {actionsIds} from '@/store/postModule/actions'
 
 
 export default {

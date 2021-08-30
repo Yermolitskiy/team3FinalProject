@@ -4,7 +4,7 @@ import Axios from 'axios'
 //     baseURL:process.env.VUE_APP_API_URL
 // })
 const axios = Axios.create({
-    baseURL:'http://localhost:5000'
+    baseURL:`${process.env.VUE_APP_API_URL}`
 })
 
 axios.interceptors.request.use(config => {

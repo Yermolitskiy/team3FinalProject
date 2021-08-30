@@ -10,18 +10,34 @@
              <loader/>
         </div>
 
+         
+
         <div  v-if="!loading && $route.name==='AllPosts'">
 
-            <div>
-                Option to sort and search 
-            </div>
+            <custom-select v-if="Array.isArray(articleData) && articleData">
+                  <select @change="changeOrder" v-model="orderOption" name="order" id="order">
+                    <option disabled value="">Choose order</option>
+                    <option value="publicationDate">Publication Date</option>
+                    <option value="title">Title </option>
+                    <option value="author">Author </option>
+                </select>
+
+                <icon-base width="25px" height="25px" @click="orderAscending">
+                    <arrow-up-icon/>
+                </icon-base>            
+                <icon-base width="25px" height="25px" @click="orderDescending">
+                    <arrow-down-icon/>
+                </icon-base>
+            </custom-select>
+ 
 
             <div class="article_list" v-if="Array.isArray(articleData) && articleData">
                 <article-card v-for="article in articleData" 
                 :body="article.body" :title="article.title" 
                 :author="article.author"
                 :img="article.postImage"
-                :date="article.publicationDate.split('T')[0]"
+                
+                :date="new Date(Date.parse(article.publicationDate)).toLocaleString()"
                 :class="{hovered:hover === article.id}" @mouseover="hover = article.id" @mouseleave="hover = false"
                 @click="$router.push({name:'singlePost' , params:{id:article.id}})"
                 :key="'article-'+article.id" />
@@ -31,7 +47,7 @@
                     :body="articleData.body" :title="articleData.title" 
                     :author="articleData.author"
                     :img="articleData.postImage"
-                    :date="articleData.publicationDate.split('T')[0]"
+                    :date="new Date(Date.parse(articleData.publicationDate)).toLocaleString()"
                      />
                  />
             </div>
@@ -39,7 +55,7 @@
                 <h1>No posts yet</h1>
             </div>
             
-        <div v-if="!loading" v-intersection="fetchMorePosts" class="observer" ></div>
+        <div v-if="!loading" v-intersection="loadMore" class="observer" ></div>
         </div>
         
     </div>
@@ -48,12 +64,13 @@
 <script>
 
     import {mapActions, mapMutations, mapState} from 'vuex'
-import ArticleCard from '../../components/ArticleCard.vue'
-    // import {actionsIds} from '@/store/postModule/actions'
-    import {actionsIds} from '../../store/postModule/actions'
-    import {postMutationsIds} from '../../store/postModule/mutations'
+    import ArticleCard from '@/components/ArticleCard.vue'
+    import {actionsIds} from '@/store/postModule/actions'
+    import {postMutationsIds} from '@/store/postModule/mutations'
+    import ArrowUpIcon from '@/components/Icons/ArrowUp.vue'
+    import ArrowDownIcon from '@/components/Icons/ArrowDown.vue'
     export default {
-  components: { ArticleCard },
+  components: { ArticleCard , ArrowUpIcon , ArrowDownIcon },
         data(){
             
             return{
@@ -66,12 +83,8 @@ import ArticleCard from '../../components/ArticleCard.vue'
                     {id:6 , author:'Josh Bush' , title:'Some title 6' , body:'Eagerness it delighted pronounce repulsive furniture no. Excuse few the remain highly feebly add people manner say. It high at my mind by roof. No wonder worthy in dinner. ' , date:'14.03.2021'}
                 ],
                 hover:false,
-                
-
-
-               
-
-
+                orderOption:'',
+                orderDirection:''
             }
         },
         methods:{
@@ -81,7 +94,28 @@ import ArticleCard from '../../components/ArticleCard.vue'
           }),
           ...mapMutations({
               setPage:'post/' + postMutationsIds.SET_PAGE
-          })
+          }),
+          changeOrder(){
+              this.setPage(0)
+              this.fetchPosts({order:this.orderOption})
+          },
+          orderAscending(){
+              if(this.orderOption){
+                  this.setPage(0)
+                  this.orderDirection = 'ASC'
+                  this.fetchPosts({order:this.orderOption , orderDirection:this.orderDirection})
+              }
+          },
+          orderDescending(){
+              if(this.orderOption){
+                  this.setPage(0)
+                  this.orderDirection = 'DESC'
+                  this.fetchPosts({order:this.orderOption , orderDirection:this.orderDirection})
+              }
+          },
+          loadMore(){
+              this.fetchMorePosts({order:this.orderOption , orderDirection:this.orderDirection})
+          }
         },
         computed:{
             ...mapState({
@@ -107,6 +141,13 @@ import ArticleCard from '../../components/ArticleCard.vue'
   background-color: skyblue;
   cursor:pointer;
 }
+
+.select_box{
+    align-self: flex-end;
+    display: flex;
+    margin-right:3.5rem;
+}
+
 
 .article_list{
     display: flex;

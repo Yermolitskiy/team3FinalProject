@@ -46,6 +46,9 @@
                     <article-button color="#4ac793" @click="$router.push({name:'editPost' , params:{id:$route.params.id}})">Edit</article-button>
                     <article-button color="#cf5a4a" @click="showModal()" >Delete</article-button>
                 </div>
+                <div class="button_wrapper" v-else-if="selectedPost">
+                        <article-button color="#cf5a4a" @click="$router.go(-1)" >Go back</article-button>
+                </div>
 
             </div>
 
@@ -136,7 +139,7 @@ import {postMutationsIds} from '../../store/postModule/mutations'
 }
 
 .button_wrapper{
-    margin:10px 0 10px 0;
+    margin:10px 15px 10px 0;
     display: flex;
     justify-content: center;
     align-items: center;

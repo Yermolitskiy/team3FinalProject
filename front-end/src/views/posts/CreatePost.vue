@@ -37,10 +37,10 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
-import { actionsIds } from '../../store/postModule/actions'
-import {postMutationsIds} from '../../store/postModule/mutations'
+import { actionsIds } from '@/store/postModule/actions'
+import {postMutationsIds} from '@/store/postModule/mutations'
 import validate from '@/utils/formValidator'
-// import { actionsIds } from '@store/postModule/actions'
+
     
     export default {
         data(){
@@ -60,6 +60,8 @@ import validate from '@/utils/formValidator'
                 //refactor this later
                 if(!this.validationErrors.length)
                     this.handleCreatePost({data : this.postFormValues})
+
+                this.postFormValues = { title:'', body:'', postImage:null, postImageUrl:null }
                 
             },
             pickFile(){

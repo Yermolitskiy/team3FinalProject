@@ -6,8 +6,8 @@ class PostRepository {
     storage = new MySQLStorage({table:'posts'})
 
 
-    async getBy(criteria){
-        const postData = await this.storage.findBy(criteria)
+    async getBy(criteria , queryOptions){
+        const postData = await this.storage.findBy(criteria , queryOptions)
         if(Array.isArray(postData)){
             return postData.map(post => new PostModel(post))
         }else{
@@ -22,17 +22,9 @@ class PostRepository {
     async create(data){
         try {
 
-            console.log(data)
-
             const createdId = await this.storage.create(data)
-
-            console.log(createdId)
-
             if(!createdId) throw new Error('Error creating new post')
-
             const post = await this.storage.findBy({id:createdId})
-   
-
             return new PostModel(post)
         } catch (error) {
             throw new Error('Error creating new post')

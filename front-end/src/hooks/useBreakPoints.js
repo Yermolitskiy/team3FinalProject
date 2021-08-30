@@ -5,7 +5,7 @@ export default function(){
     let windowWidth = ref(window.innerWidth)
 
     const onWidthChange = () => windowWidth.value = window.innerWidth
-    onMounted(() => console.log(window.addEventListener('resize' , debounce(onWidthChange,50))))
+    onMounted(() => window.addEventListener('resize' , debounce(onWidthChange,50)))
     onUnmounted(() => {
         console.log(window.removeEventListener('resize' , onWidthChange))
         

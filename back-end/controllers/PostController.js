@@ -17,15 +17,8 @@ class PostController {
              
                 const post = await PostRepository.getBy({id})
                 return res.status(200).json(addMetaData(req,res,post))
-            }
-            
-            
-            const queryOptions = {}
-            // if(req.query.filter) queryOptions['filter'] = req.query.filter
-            if(req.query.order)  queryOptions['order'] = req.query.order
-                
-            const posts = await PostRepository.getAll(queryOptions)
-  
+            }       
+            const posts = await PostRepository.getAll(req.query)
             return res.status(200).json(addMetaData(req,res,posts))
             
         } catch (error) {
@@ -41,17 +34,14 @@ class PostController {
             const {userId} = req.user
 
             if(id){
-               
                 const post = await PostRepository.getBy({id , author:userId})
                 //when not author tries to access specific post
-        
                 if(!post.id){
                     return res.status(400).json('Forbidden')
                 }
-             
                 return res.status(200).json(addMetaData(req,res,post))
             }else{
-                const posts = await PostRepository.getBy({author:userId})
+                const posts = await PostRepository.getBy({author:userId} ,req.query)
                 return res.status(200).json(addMetaData(req,res,posts))
             }
        
@@ -116,15 +106,7 @@ class PostController {
        
     }
 
-    async testImageUpload(req,res,next){
-        try {
-            console.log(req.file)
-            console.log(req.body)
-            return res.send('hi')
-        } catch (error) {
-            return res.status(400).json(error)
-        }
-    }
+
 
 }
 
