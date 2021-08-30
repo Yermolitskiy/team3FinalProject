@@ -2,6 +2,8 @@
 // form better to be refactored later
 //prop1 form types (formTypes) - 1.login 2.register 3.postForm
 //prop2 initial data
+//p.s. removed login and register part in favor of FormWithSlots and have left this 
+// component for variety of approaches  
 <template>
   <form>
     <div class="form_header">
@@ -16,75 +18,10 @@
         </ul>
     </div>
 
-    <div
-      v-if=" formType === 'register'"
-      class="form_wrapper"
-    >
-      <input
-        v-model="inputValues.register.name"
-        placeholder="name"
-        name="name"
-        id="name"
-      />
-      <input
-        v-model="inputValues.register.surname"
-        placeholder="surname"
-        name="surname"
-        id="surname"
-      />
-      <input
-        v-model="inputValues.register.email"
-        placeholder="email"
-        name="email"
-        id="email"
-      />
-      <input
-        v-model="inputValues.register.age"
-        type="number"
-        placeholder="age"
-        name="age"
-        id="age"
-      />
-      <input
-        v-model="inputValues.register.password"
-        type="password"
-        placeholder="password"
-        name="password"
-        id="password"
-      />
-      <input
-        v-model="inputValues.register.password_confirm"
-        type="password"
-        name="password_confirm"
-        placeholder="confirm password"
-        id="password_confirm"
-      />
-    </div>
+ 
 
-    <div v-else-if="formType === 'login'" class="form_wrapper">
-        
-      <input
-        v-model="inputValues.login.email"
-        name="email"
-        placeholder="email"
-        id="email"
-      />
-      <input
-        v-model="inputValues.login.password"
-        type="password"
-        placeholder="password"
-        name="password"
-        id="password"
-      />
-    </div>
-
-    <div
-      v-else-if=" formType === 'postForm'"
-      class="form_wrapper"
-    >
+    <div v-if=" formType === 'postForm'"  class="form_wrapper" >
        
-
-
       <input
         class="postTitle"
         v-model="inputValues.postForm.title"
@@ -92,7 +29,6 @@
         placeholder="title"
         id="title"
       />
-
 
       <textarea
         v-model="inputValues.postForm.body"
@@ -110,7 +46,6 @@
       <button-1 v-if="withImage" style="background:green" @click.prevent="pickFile">Upload Image</button-1>
       <input type="file" style="display:none" ref="fileInput" accept="image/* , .jpg , .png" @change="onFilePicked" >
 
-
     </div>
 
     <div v-else>
@@ -127,8 +62,6 @@
         <slot name="submit_button"> Submit </slot>
       </button-1>
     </div>
-
-    
 
   </form>
 </template>

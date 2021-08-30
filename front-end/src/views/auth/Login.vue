@@ -4,16 +4,20 @@
         <div v-if="error">
             {{error}}
         </div>
-        <custom-form @onSubmit="login" :formType="'login'">
-            <template #header>
-                Login
-            </template>
-            <template #submit_button>
-                    Sign in
-            </template>
-        </custom-form>
+   
 
-
+        <slot-form>
+            <template #header> Login </template>
+            <template #input1>
+                <input type="text" v-model="login_email" name="email" id="email" placeholder="email">
+            </template>
+            <template #input2>
+                <input type="password" v-model="login_password" name="password" id="password" placeholder="Password">
+            </template>
+            <template #form_button1>
+                <button-1 @click.prevent="login"> Login </button-1>
+            </template>
+        </slot-form>
         
 
 
@@ -25,20 +29,25 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 import {authMutationsIds} from '../../store/authModule/mutations'
 // import {authMutationsIds} from '@store/authModule/mutations'
     export default {
+
+        data(){
+            return{
+                login_email:'',
+                login_password:''
+            }
+        },
         methods:{
-           ...mapActions({
+            ...mapActions({
                handleLogin:'auth/login'
            }),
            ...mapMutations({setError:'auth/'+authMutationsIds.SET_ERROR}),
-           login(data){
-               this.handleLogin(data)
-                .then(() => {
-                    if(!this.error){
-                        this.$router.replace('/')
-                        }
-                })
-
-              
+           login(){
+               console.log('logging?')
+               this.handleLogin({email:this.login_email , password:this.login_password})
+           },
+           test(){
+               console.log(this.login_password)
+               console.log(this.login_email)
            }
         },
         mounted(){this.setError(null)},

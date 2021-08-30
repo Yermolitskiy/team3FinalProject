@@ -2,7 +2,9 @@
   <div class="home">
 
     <img alt="Accenture Bootcamp logo" id="logo" src="../assets/logo.jpg">
-    <loader/>
+    <div v-if="loading">
+      <loader/>
+    </div>
     <div class="card_container" :style="gridStyle" v-if="!loading && Array.isArray(postsData)">
       <post-card v-for="post in postsData"
         :img="post.postImage" 
@@ -72,11 +74,7 @@ export default {
     }),
     ...mapActions({
       fetchPosts:'post/'+actionsIds.FETCH_POSTS
-    }),
-    test(event){
-      console.log('test')
-      console.log(event)
-    }
+    })
   },
   mounted(){
    this.setLimit(3)

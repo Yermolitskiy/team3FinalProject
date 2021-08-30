@@ -13,7 +13,7 @@
         </my-dialog>
            
            <div v-if="loading">
-               ...Loading
+            <loader/>
            </div>
 
             <div class="post_wrapper" v-if="$route.name === 'editPost' && !loading && selectedPost">
@@ -103,9 +103,6 @@ import {postMutationsIds} from '../../store/postModule/mutations'
                ofCurrentUser(){
                    return (this.user.name + " " + this.user.surname) === this.selectedPost.author
                }
-        //    post(){
-        //        return Array.from(this.$store.state.post.posts).find(post => post.id === Number.parseInt(this.$route.params.id))
-        //    }
        },
        mounted(){
         

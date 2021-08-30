@@ -6,7 +6,7 @@
         <!-- single post view -->
 
 
-         <div v-if="$route.name==='AllPosts'">
+         <div v-if="$route.name==='AllPosts' && loading">
              <loader/>
         </div>
 
@@ -21,7 +21,7 @@
                 @click="$router.push({name:'singlePost' , params:{id:article.id}})"
                 :key="'article-'+article.id" />
             </div>
-            <div v-else-if="!Array.isArray(articleData) && articleData">
+            <div v-else-if="!Array.isArray(articleData) && Object.entries(articleData).length">
                 <article-card
                     :body="articleData.body" :title="articleData.title" 
                     :author="articleData.author"

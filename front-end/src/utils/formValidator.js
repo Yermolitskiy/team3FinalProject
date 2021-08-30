@@ -1,4 +1,5 @@
-export default function validate(data, type) {
+
+export default function validate({data, type}) {
     let errors = []
 
     switch (type) {
@@ -32,14 +33,14 @@ export default function validate(data, type) {
     }
 }
 
-const checkEmpty = data => Object.entries(data).filter(entry => entry[0] !== 'password_confirm' && entry[0] !== 'postImage' && entry[0] !== 'postImageUrl')
+const checkEmpty = data => Object.entries(data).filter(entry => entry[0] !== 'passwordConfirm' && entry[0] !== 'postImage' && entry[0] !== 'postImageUrl')
     .filter(entry => !entry[1])
     .map(entry =>
         //string template that turns camelCase into usual text (camelCase => camel case)
         `${entry[0].replace(/([A-Z])/g, ",$1").toLocaleLowerCase()} must be filled`)
 
 
-const checkLength = data => Object.keys(data).filter(e => e !== 'password_confirm' && e !== 'password' && e !== 'email' && e !== 'postImage' && e !== 'postImageUrl')
+const checkLength = data => Object.keys(data).filter(e => e !== 'passwordConfirm' && e !== 'password' && e !== 'email' && e !== 'postImage' && e !== 'postImageUrl')
     .filter(e => data[e].length <= 2 || data[e] <= 3)
     .map(e => `${e.replace(/([A-Z])/g, ",$1").toLocaleLowerCase()} is to small`)
 
@@ -57,7 +58,7 @@ const checkPassword = data => {
     else return ['Password must be at least 6 characters long and contain 1 uppercase and 1 special symbol']
 }
 
-const checkPasswordMatch = data => data['password'] !== data['password_confirm'] ? ['Passwords don\'t match '] : []
+const checkPasswordMatch = data => data['password'] !== data['passwordConfirm'] ? ['Passwords don\'t match '] : []
 
 
 

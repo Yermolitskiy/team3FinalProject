@@ -35,7 +35,7 @@ const actions = {
                         limit:state.limit
                     }})
                 
-            console.log('x-total,count' , response.headers['x-total-count'])
+           
             commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
             commit(postMutationsIds.SET_POSTS , response.data.posts)
             commit(postMutationsIds.SET_POSTS_META , response.data.meta)
@@ -57,7 +57,7 @@ const actions = {
             }
         //common error handling for both cases
         } catch (error) {
-            console.log('error?' , error)
+         
             console.log(error.response.data.error)
             commit(postMutationsIds.SET_ERROR, error.response.data.error)
         }finally{
@@ -118,6 +118,8 @@ const actions = {
     async createPost({ commit , state} , data){
 
         try {
+         
+
             commit(postMutationsIds.SET_ERROR , null)
 
             // id is recieved from token payload instead
@@ -216,8 +218,7 @@ const actions = {
     async removePost({commit} , postId){
         try {
             commit(postMutationsIds.REMOVE_POST , postId)
-            const response = await axios.delete(`http://localhost:5000/api/posts/userPosts/${postId}`)
-            console.log(response)
+            await axios.delete(`http://localhost:5000/api/posts/userPosts/${postId}`)
             commit(postMutationsIds.SET_MESSAGE , 'Post Succesfully deleted')
 
         } catch (error) {

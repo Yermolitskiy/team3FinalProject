@@ -17,7 +17,9 @@
     <!-- delete modal window -->
 
     <!-- simple text loading status -->
+    <div v-if="loading  && $route.name === 'myPosts'">
         <loader/>
+    </div>
 
  
         <div v-if="message">
@@ -45,7 +47,7 @@
                     </div>
                 </div>
            </div>
-           <div v-else-if="!Array.isArray(myPosts) && myPosts">
+           <div v-else-if="!Array.isArray(myPosts) && Object.entries(myPosts).length">
                <article-card 
                     :body="myPosts.body" :title="myPosts.title"
                     :img="myPosts.postImage" :author="myPosts.author" :date="myPosts.publicationDate.split('T')[0]"/>
@@ -94,6 +96,7 @@ import {postMutationsIds} from '../../store/postModule/mutations'
             showModal(id){
                 this.postId = id
                 this.modalVisible = true
+                
             },
             deletePost(){
                 this.handleDeletePost(this.postId)

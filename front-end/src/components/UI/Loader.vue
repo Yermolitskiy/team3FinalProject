@@ -1,22 +1,14 @@
 <template>
-    <div v-if="postsLoading || authLoading">
+    
         <div class="loader">
-
         </div>
 
-    </div>
+
 </template>
 
 <script>
-import { mapState } from 'vuex'
     export default {
         name:'loader',
-        computed:{
-            ...mapState({
-                postsLoading:state => state.post.postsLoading,
-                authLoading:state => state.auth.userLoading
-            })
-        }
     }
 </script>
 

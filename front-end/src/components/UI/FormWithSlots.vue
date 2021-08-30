@@ -4,13 +4,15 @@
         <slot name="header"></slot>
        </div>
 
-        <div v-if="validationErrors.length" class="errorMsg">
+      <div v-if="Array.isArray(errors)">
+        <div v-if="errors.length" class="errorMsg">
             <ul>
-            <li v-for="(validationError , i) in validationErrors" :key="'error'+i" class="error">
+            <li v-for="(validationError , i) in errors" :key="'error'+i" class="error">
                 {{validationError}}
             </li>
             </ul>
         </div>
+      </div>
 
         <div class="form_wrapper">
           <slot name="input1"></slot>
@@ -25,9 +27,17 @@
           <slot name="input10"></slot>
         </div>
 
-        <div class="submit_btn">
-          <slot name="form_button1"></slot>
+        <div>
+          <slot name="extra_content"></slot>
         </div>
+
+        <div class="form_button_wrapper">
+          <slot name="form_button1"></slot>
+          <slot name="form_button2"></slot>
+          <slot name="form_button3"></slot>
+        </div>
+
+
 
    </form>
    
@@ -36,18 +46,31 @@
 <script>
     export default {
         name:'slot-form',
-        data(){
-          return {
-            validationErrors:[]
+        props:{
+          errors:{
+            type: Object , 
+            default:() => {}
           }
         }
     }
+
+    
 </script>
 
-<style scoped>
+<style>
 
 
 @media only screen and (min-width: 325px) {
+
+ .form_button_wrapper{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+ }
+ .button_wrapper button{
+   margin:15px 0 10px 0;
+ }
 
   form {
     min-width: 20rem;

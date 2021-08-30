@@ -55,6 +55,7 @@ const actions = {
             localStorage.setItem('user' , JSON.stringify(response.data.user))
             commit(authMutationsIds.SET_USER , response.data.user)
             commit(authMutationsIds.SET_LOGGED , true)
+            router.push('/')
             
         } catch (error) {
             commit(authMutationsIds.SET_ERROR, error.response.data.error)
