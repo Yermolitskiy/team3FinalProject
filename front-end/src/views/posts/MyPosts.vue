@@ -28,6 +28,11 @@
 
 
        <div class="article_list" v-if="!loading && ($route.name === 'myPosts')">
+
+            <div>
+                Option to sort and search 
+            </div>
+
            <div v-if="Array.isArray(myPosts) && myPosts">
                 <div v-for="article in myPosts" :key="'article-'+article.id" >
                     <article-card  

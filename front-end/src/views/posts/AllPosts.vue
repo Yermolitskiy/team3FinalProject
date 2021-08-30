@@ -11,6 +11,11 @@
         </div>
 
         <div  v-if="!loading && $route.name==='AllPosts'">
+
+            <div>
+                Option to sort and search 
+            </div>
+
             <div class="article_list" v-if="Array.isArray(articleData) && articleData">
                 <article-card v-for="article in articleData" 
                 :body="article.body" :title="article.title" 
