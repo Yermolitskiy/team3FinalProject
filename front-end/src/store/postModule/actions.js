@@ -27,12 +27,11 @@ const actions = {
            
             const ofCurrentUser = data?.ofCurrentUser
             const offset = state.page === 0 ? 0 :  state.page * state.limit
-            if(!ofCurrentUser){
             commit(postMutationsIds.SET_LOADING , true);
             commit(postMutationsIds.SET_PAGE , state.page + 1)
             
 
-            const response = await axios.get('/api/posts/' , 
+            const response = await axios.get(`/api/posts${ofCurrentUser ? '/userPosts' : ''}` , 
                 {params: 
                     {
                         offset,
@@ -43,26 +42,15 @@ const actions = {
                 
            
             commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
+
+            ofCurrentUser ? commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , ...response.data.posts])
+                                //fetch for current user
+                              : commit(postMutationsIds.SET_POSTS , [...state.posts , ...response.data.posts])
+
             commit(postMutationsIds.SET_POSTS , response.data.posts)
             commit(postMutationsIds.SET_POSTS_META , response.data.meta)
-            }
-            //fetch for current user
-            else{
-                commit(postMutationsIds.SET_LOADING , true)
-                commit(postMutationsIds.SET_PAGE , state.page + 1)
-
-                const response = await axios.get('/api/posts/userPosts' , {
-                    params:{
-                        offset , limit:state.limit ,
-                        order:data?.order,
-                        orderDirection:data?.orderDirection
-                    }
-                })
-               
-                commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
-                commit(postMutationsIds.SET_MY_POSTS , response.data.posts)
-                commit(postMutationsIds.SET_POST_META , response.data.meta)
-            }
+        
+           
         //common error handling for both cases
         } catch (error) {
          
@@ -80,12 +68,10 @@ const actions = {
             const ofCurrentUser = data?.ofCurrentUser
             const offset = state.page * state.limit
             if(state.page  < state.totalPages){
-            if(!ofCurrentUser){
-                //prevents infinite repeatative scroll when post amount is less than 1 page
                 
                 commit(postMutationsIds.SET_PAGE , state.page + 1)
 
-                const response = await axios.get('/api/posts' , {
+                const response = await axios.get(`/api/posts${ofCurrentUser ? 'userPosts' : ''}` , {
                     params:{
                         offset , limit:state.limit ,
                         order:data?.order,
@@ -94,24 +80,11 @@ const actions = {
                 })
         
                 commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
-                commit(postMutationsIds.SET_POSTS , [...state.posts , ...response.data.posts])
+
+                ofCurrentUser ? commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , ...response.data.posts])
+                              : commit(postMutationsIds.SET_POSTS , [...state.posts , ...response.data.posts])
+
                 commit(postMutationsIds.SET_POST_META , response.data.meta)
-            
-            }
-            //else fetch more user's posts
-            else{
-               
-                    commit(postMutationsIds.SET_PAGE , state.page + 1)
-                    const response = await axios.get('/api/posts/userPosts' , {
-                        params:{
-                            offset , limit:state.limit
-                        }
-                    })            
-                    commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
-                    commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , ...response.data.posts])
-                    commit(postMutationsIds.SET_POST_META , response.data.meta)
-                
-            }
         }
            
         } catch (error) {
@@ -151,7 +124,6 @@ const actions = {
             else
             {
              
-                delete postData['postImageUrl']
                 const formData = new FormData()
 
                 formData.append('title' , postData.title)
@@ -194,20 +166,10 @@ const actions = {
                 const ofCurrentUser = data?.ofCurrentUser
                 const id = data.id
 
-              
-                if(!ofCurrentUser){
-                    commit(postMutationsIds.SET_LOADING , true)
-                    const response = await axios.get(`/api/posts/${id}`)
-                    commit(postMutationsIds.SELECT_POST , response.data.posts)
-                    commit(postMutationsIds.SET_POST_META , response.data.meta)
-                }else{
-                    commit(postMutationsIds.SET_LOADING , true)
-                    const response = await axios.get(`/api/posts/userPosts/${id}`)
-                    commit(postMutationsIds.SELECT_POST , response.data.posts)
-
-                    //currently is not used
-                    commit(postMutationsIds.SET_POST_META , response.data.meta)
-                }
+                commit(postMutationsIds.SET_LOADING , true)
+                const response = await axios.get(`api/posts${ofCurrentUser ? `/userPosts/${id}` : `/${id}`}`)
+                commit(postMutationsIds.SELECT_POST , response.data.posts)
+                commit(postMutationsIds.SET_POSTS_META , response.data.posts)
                 
     
             } catch (error) {

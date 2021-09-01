@@ -23,10 +23,11 @@ export default function validate({data, type}) {
             errors = errors.concat(checkEmpty(data))
             return errors
         case 'postForm':
+     
             errors = errors.concat(checkEmpty(data))
             if (errors.length) return errors
             errors = errors.concat(checkLength(data))
-
+          
             return errors
         default:
             break;

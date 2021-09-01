@@ -134,8 +134,8 @@ export default {
       fileReader.readAsDataURL(files[0])
     },
     submit() {
-      const errors = validator(this.inputValues[this.formType] , this.formType)
-
+    
+      const errors = validator({data:this.inputValues[this.formType] , type:this.formType})
       if(!errors.length){
         this.validationErrors = []
         if(this.withImage){

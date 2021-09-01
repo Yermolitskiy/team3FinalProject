@@ -22,7 +22,7 @@
     </div>
 
  
-        <div v-if="message">
+        <div v-if="message && ($route.name === 'myPosts')">
            <h2>{{message}}</h2> 
         </div>
 
