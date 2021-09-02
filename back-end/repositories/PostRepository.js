@@ -4,6 +4,7 @@ const PostModel = require('../models/Post')
 class PostRepository {
 
     storage = new MySQLStorage({table:'posts'})
+   
 
 
     async getBy(criteria , queryOptions){

@@ -13,7 +13,7 @@
         :title="post.title"
         :key="'post-' + post.id"/>
     </div>
-    <div v-else-if="!loading && !Array.isArray(postData)">
+    <div v-else-if="!loading && !Array.isArray(postData) && Object.entries(postData).length">
       <post-card 
         :title="postsData.title" 
         @click="$router.push({name:'singlePost' , params:{id:postsData.id}})"

@@ -204,6 +204,7 @@ export default {
     color:rgb(124, 107, 181);
     padding:0;
     font-size:16px;
+    cursor:pointer;
   }
 }
 

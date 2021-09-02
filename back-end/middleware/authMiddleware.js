@@ -1,4 +1,4 @@
-const validateToken = require('../utils/token/validateToken')
+const TokenService = require('../services/TokenService')
 
 module.exports = function (req , res , next){
 
@@ -14,7 +14,7 @@ module.exports = function (req , res , next){
 
         if(!token) throw new Error('Unauthorized error')
         
-        const userId = validateToken(token)
+        const userId = TokenService.validateAccessToken(token)
 
         if(!userId) throw new Error('Unauthorized error')
         

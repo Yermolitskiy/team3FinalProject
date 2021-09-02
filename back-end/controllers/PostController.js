@@ -56,7 +56,6 @@ class PostController {
             const {userId} = req.user
          
             if(req.file){
-                delete data['postImageUrl']
                 const postImage = `${process.env.API_URL}${process.env.PUBLIC_POSTS_STATIC}${req.file.filename}`
                 const post = await PostRepository.create({...data ,author:userId, postImage })
                 return res.status(201).json(post)

@@ -11,7 +11,7 @@ module.exports = class MySQLStorage extends BaseStorage{
     async findBy(criteria , queryOptions){
         try {
             const keys = Object.keys(criteria)
-            let query
+           
 
             //this literal template puts all key/value pairs in one query whether single option or multiple options are passed
             const simpleSelectQuery = `SELECT * FROM ${this._table} WHERE ${keys.length > 1 ? `${keys.flatMap(key => ` \`${key}\` = \` ${criteria[key]}\` `).join(' AND ')} ` 
@@ -27,19 +27,12 @@ module.exports = class MySQLStorage extends BaseStorage{
                           `
 
             
-            
-            if(this._table == 'posts'){query = innerJoinPostsQuery}
-            else {query = simpleSelectQuery}
-
-            
+            const query = this._table == 'posts' ? innerJoinPostsQuery : simpleSelectQuery  
 
             const [rows] = await connectionPool.promise().execute(query)
 
+            if(!rows.length)  return false
 
-
-            if(!rows.length){
-                return false
-            }
 
             if(rows.length === 1){
                 const postData = Object.assign({} , rows[0])
@@ -67,10 +60,7 @@ module.exports = class MySQLStorage extends BaseStorage{
                     ${queryOptions.order ? ` ORDER BY p.${queryOptions.order}` : 'ORDER BY p.publicationDate'} 
                     ${queryOptions.orderDirection ? `${queryOptions.orderDirection}` : 'DESC'}`
 
-            let query
-            if(this._table == 'posts'){query = innerJoinPostsQuery}
-            else {query = simpleSelectQuery}
-
+            const query = this._table == 'posts' ? innerJoinPostsQuery : simpleSelectQuery
             const [rows] = await connectionPool.promise().execute(query)
             const data = rows.map(row => Object.assign({} , row))
             return data
@@ -81,6 +71,7 @@ module.exports = class MySQLStorage extends BaseStorage{
 
     async create(data){
         try {
+
             const keys = Object.keys(data)
             const query = `INSERT INTO \`${this._table}\` (\`id\` ,  ${keys.flatMap(key => `\`${key}\``).join(' , ')})
              VALUES (NULL , ${keys.flatMap(key => `'${data[key]}'`).join(' , ')})  `
@@ -88,6 +79,7 @@ module.exports = class MySQLStorage extends BaseStorage{
 
             const getInsertedIdQuery = `SELECT LAST_INSERT_ID()`
             const row = await connectionPool.promise().execute(getInsertedIdQuery)
+
             
             //getting id of newly created record to return/check data from database in result
             //row[0] === [BinaryRow {'LAST_INSERT_ID()': desired id here} ]
@@ -112,15 +104,36 @@ module.exports = class MySQLStorage extends BaseStorage{
 
     async update({id , data}){
         try {
+          
             const keys = Object.keys(data)
             const query = `UPDATE ${this._table} SET ${keys.length > 1 ?
                 `${keys.flatMap( key  => ` \`${key}\` = '${data[key]}' `)}`
                  : ` \`${keys[0]}\` = '${data[keys[0]]}'`} WHERE id = ${id}`
 
+          
+
             await connectionPool.promise().execute(query)
            
         } catch (error) {
             console.log(error)   
+        }
+    }
+
+    async deleteBy(criteria){
+
+        try {
+            const keys =  Object.keys(criteria)
+            const deleteQuery = `DELETE FROM ${this._table} WHERE ${keys.length > 1 ? `${keys.flatMap(key => ` \`${key}\` = \` ${criteria[key]}\` `).join(' AND ')} ` 
+                            : ` \`${keys[0]}\` = '${criteria[keys[0]]}' ` }`
+
+    
+            await connectionPool.promise().execute(deleteQuery)
+
+
+         
+        } catch (error) {
+            console.log(error)
+            throw new Error('db failed to remove entity(-ies)')
         }
     }
 }

@@ -6,12 +6,13 @@ import router from '../../router/'
 const actions = {
     async register({commit} , data){
         try {
+            console.log(data)
             commit(authMutationsIds.SET_LOADING , true)
             commit(authMutationsIds.SET_ERROR , null)
 
             const response = await axios.post(`/api/auth/register` , data)
-
-            localStorage.setItem('token' , response.data.token)
+            console.log(response.data)
+            localStorage.setItem('token' , response.data.accessToken)
             localStorage.setItem('user' , JSON.stringify(response.data.user))
             
             commit(authMutationsIds.SET_USER , response.data.user)
@@ -50,7 +51,7 @@ const actions = {
             commit(authMutationsIds.SET_LOADING ,true)
             commit(authMutationsIds.SET_ERROR, null)
             const response = await axios.post(`/api/auth/login`,data)
-            localStorage.setItem('token' , response.data.token)
+            localStorage.setItem('token' , response.data.accessToken)
             localStorage.setItem('user' , JSON.stringify(response.data.user))
             commit(authMutationsIds.SET_USER , response.data.user)
             commit(authMutationsIds.SET_LOGGED , true)
@@ -65,12 +66,13 @@ const actions = {
 
     
 
-    logout({commit}){
-        localStorage.removeItem('token')
-        localStorage.removeItem('user')
-
+    async logout({commit}){
+        
         commit(authMutationsIds.SET_USER , {})
         commit(authMutationsIds.SET_LOGGED , false)
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        await axios.post(`api/auth/logout`)
     }
 }
 

@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-// const cookie_parser = require('cookie-parser')
+const cookie_parser = require('cookie-parser')
 const authRoutes = require('./routes/auth')
 const postRoutes = require('./routes/posts')
 const {resolve} = require('path')
@@ -8,8 +8,11 @@ require('dotenv').config()
 
 const app = express()
 
-app.use(cors({origin:'*'}))
-// app.use(cookie_parser())
+app.use(cors({
+    credentials:true,
+    origin:'http://localhost:8080'
+}))
+app.use(cookie_parser())
 app.use('/public',express.static(resolve(__dirname , './public')))
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())

@@ -3,6 +3,7 @@ const {resolve} = require('path')
 const {v1} = require('uuid')
 
 const postsStoragePath = resolve(__dirname , '../../public/posts/uploads/')
+
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
         cb(null , postsStoragePath)

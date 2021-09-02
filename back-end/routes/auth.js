@@ -8,5 +8,6 @@ router.post('/logout' , AuthController.logout)
 
 //experimental
 router.post('/tokenResolve' , AuthController.tokenResolve)
+router.get('/refresh' , AuthController.refresh)
 
 module.exports = router

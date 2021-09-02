@@ -42,12 +42,7 @@ import {authMutationsIds} from '@/store/authModule/mutations'
            }),
            ...mapMutations({setError:'auth/'+authMutationsIds.SET_ERROR}),
            login(){
-               console.log('logging?')
                this.handleLogin({email:this.login_email , password:this.login_password})
-           },
-           test(){
-               console.log(this.login_password)
-               console.log(this.login_email)
            }
         },
         mounted(){this.setError(null)},
