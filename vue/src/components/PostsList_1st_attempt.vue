@@ -1,20 +1,63 @@
 <template>
-  <div class="all_cards">
-  <div      
-      :class="{ active: index == currentIndex }"
+  
+    <!-- <div class="col-md-8">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search by title"
+          v-model="title"/>
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button"
+            @click="searchTitle"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </div> -->
+    <div class="col-md-6">
+      <h4>Posts List</h4>
+        <div>
+        <div class="list-group-item"
+          :class="{ active: index == currentIndex }"
           v-for="(post, index) in posts"
           :key="index"
           @click="setActivePost(post, index)"
-      >
-      <div class="card">
-        <img src="https://lh3.googleusercontent.com/d/1RlTfZ1wVgMsgSN3b8L1bFameHjYxFDfz=s520?authuser=0" alt="image" style="height:50px">
-        <div class="container">
-          <h4><b>{{ post.title }}</b></h4>
-          <p>{{ post.description }}</p>
-        </div>
-      </div>
+        >
+          
+        
+
+          <div class="card">
+            <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+            <div class="container">
+              <h4><b>
+                {{ post.title }}
+              </b></h4>
+              <p>Architect & Engineer</p>
+            </div>
+          </div>
+          
+          </div>
+          
+
+
+       
+
+
+
+
+
+
+
+
+
+
+        
+      
+
+      <button class="m-3 btn btn-sm btn-danger" @click="removeAllPosts">
+        Remove All
+      </button>
     </div>
-    <div>
+    <div class="col-md-6">
       <div v-if="currentPost">
         <h4>Post</h4>
         <div>
@@ -103,32 +146,16 @@ export default {
 </script>
 
 <style>
-/* .list {
+.list {
   text-align: left;
   max-width: 750px;
-  margin: auto; 
-}*/
-.content {
-  max-width: 500px;
   margin: auto;
-  display: flex;
-}
-.all_cards {
-  margin-top: 25px;
-  margin-left: 20%;
-  margin-right: 20%;
-  height: 100%;
-  position: relative;
-  /* border: 3px solid green; */
 }
 .card {
   /* Add shadows to create the "card" effect */
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.7);
   transition: 0.3s;
-  width: 100%;
-  justify-content: center;
-  margin-bottom: 25px;
-  
+  border-radius: 5px; /* 5px rounded corners */
 }
 
 /* On mouse-over, add a deeper shadow */

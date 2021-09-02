@@ -18,9 +18,9 @@
       {{currentUser.email}}
     </p>
     <strong>Authorities:</strong>
-    <ul>
-      <li v-for="role in currentUser.roles" :key="role">{{role}}</li>
-    </ul>
+    <p>
+      <strong v-for="role in currentUser.roles" :key="role">{{role}}</strong>
+    </p>
 
   </div>
 </template>
