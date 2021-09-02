@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const {resolve} = require('path')
 
 const app = express();
 
@@ -8,6 +9,10 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+//folder where will be stored publically available post images and maybe any other static files
+app.use('/public',express.static(resolve(__dirname , '../app/public')))
+
 
 // parse requests of content-type - application/json
 app.use(express.json());
