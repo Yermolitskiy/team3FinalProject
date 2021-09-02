@@ -22,8 +22,7 @@
           :key="index"
           @click="setActivePost(post, index)"
         >
-          {{ post.title }},
-          {{ post.description }}
+          {{ post.title }}
         </li>
       </ul>
 

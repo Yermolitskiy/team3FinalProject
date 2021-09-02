@@ -1,5 +1,5 @@
 <template>
-  <div class="list row">
+  
     <!-- <div class="col-md-8">
       <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Search by title"
@@ -15,16 +15,43 @@
     </div> -->
     <div class="col-md-6">
       <h4>Posts List</h4>
-      <ul class="list-group">
-        <li class="list-group-item"
+        <div>
+        <div class="list-group-item"
           :class="{ active: index == currentIndex }"
           v-for="(post, index) in posts"
           :key="index"
           @click="setActivePost(post, index)"
         >
-          {{ post.title }}
-        </li>
-      </ul>
+          
+        
+
+          <div class="card">
+            <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+            <div class="container">
+              <h4><b>
+                {{ post.title }}
+              </b></h4>
+              <p>Architect & Engineer</p>
+            </div>
+          </div>
+          
+          </div>
+          
+
+
+       
+
+
+
+
+
+
+
+
+
+
+        
+      
 
       <button class="m-3 btn btn-sm btn-danger" @click="removeAllPosts">
         Remove All
@@ -123,5 +150,21 @@ export default {
   text-align: left;
   max-width: 750px;
   margin: auto;
+}
+.card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.7);
+  transition: 0.3s;
+  border-radius: 5px; /* 5px rounded corners */
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+  padding: 2px 16px;
 }
 </style>
