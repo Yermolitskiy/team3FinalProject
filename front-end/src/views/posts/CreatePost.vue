@@ -71,10 +71,12 @@ import validate from '@/utils/formValidator'
                 const files = event.target.files
                 this.postFormValues.postImage = files[0]
             
-                //picture preview
-                const fileReader = new FileReader()
-                fileReader.addEventListener('load' , () => this.postFormValues.postImageUrl = fileReader.result)
-                fileReader.readAsDataURL(files[0])
+                if(this.postFormValues.postImage){
+                    //picture preview
+                    const fileReader = new FileReader()
+                    fileReader.addEventListener('load' , () => this.postFormValues.postImageUrl = fileReader.result)
+                    fileReader.readAsDataURL(files[0])
+                }
                 },
             ...mapActions({handleCreatePost : 'post/' + actionsIds.CREATE_POST}),
             ...mapMutations({setMessage : 'post/' + postMutationsIds.SET_MESSAGE})

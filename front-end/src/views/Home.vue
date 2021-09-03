@@ -5,7 +5,7 @@
     <div v-if="loading">
       <loader/>
     </div>
-    <div class="card_container" :style="gridStyle" v-if="!loading && Array.isArray(postsData)">
+    <div class="card_container" :style="gridStyle" v-if="!loading && Array.isArray(postsData) && postsData.length">
       <post-card v-for="post in postsData"
         :img="post.postImage" 
         :class="{hovered:hover === post.id}" @mouseover="hover = post.id" @mouseleave="hover = false"
@@ -13,16 +13,15 @@
         :title="post.title"
         :key="'post-' + post.id"/>
     </div>
-    <div v-else-if="!loading && !Array.isArray(postData) && Object.entries(postData).length">
-      <post-card 
-        :title="postsData.title" 
-        @click="$router.push({name:'singlePost' , params:{id:postsData.id}})"
-        :class="{hovered:hover === post.id}" @mouseover="hover = true" @mouseleave="hover = false"
-        :img="postsData.postImage" :id="postsData.id" />
+  
+    <div v-if="!loading && !postsData.length">
+      <h1>No posts created yet</h1>
+
+      <article-button v-if="isLogged" @click="$router.push('/createPost')" style="background:green">
+        Be first who will create a post!
+      </article-button>
     </div>
-    <div v-else-if="!loading && !postData">
-      <h1>No posts</h1>
-    </div>
+   
 
    
 
@@ -38,6 +37,7 @@ import {actionsIds} from '@/store/postModule/actions'
 
 
 export default {
+  
   data(){
     return{
       dummyPostsData:[
@@ -54,7 +54,8 @@ export default {
   ...mapState({
       loading: state => state.post.postsLoading,
       postsData: state => state.post.posts,
-      error: state => state.post.error
+      error: state => state.post.error,
+      isLogged:state => state.auth.isLogged
     }),
     gridStyle(){
       return {
@@ -68,6 +69,9 @@ export default {
   },
  
   methods:{
+    test(){
+    console.log(this.postsData.length)
+  },
     ...mapMutations({
       setLimit:'post/'+postMutationsIds.SET_LIMIT,
       setPage:'post/' + postMutationsIds.SET_PAGE

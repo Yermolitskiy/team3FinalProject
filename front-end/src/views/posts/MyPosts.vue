@@ -29,7 +29,7 @@
 
        <div class="article_list" v-if="!loading && ($route.name === 'myPosts')">
 
-                     <custom-select v-if="Array.isArray(myPosts) && myPosts">
+                     <custom-select v-if="Array.isArray(myPosts) && myPosts.length">
                         <select @change="changeOrder" v-model="orderOption" name="order" id="order">
                             <option disabled value="">Choose order</option>
                             <option value="publicationDate">Publication Date</option>
@@ -47,7 +47,7 @@
                         </icon-base>
                      </custom-select>
 
-           <div v-if="Array.isArray(myPosts) && myPosts">
+           <div v-if="Array.isArray(myPosts) && myPosts.length">
                 <div v-for="article in myPosts" :key="'article-'+article.id" >
                     <article-card  
                     :body="article.body" :title="article.title" 
@@ -57,8 +57,7 @@
                     :class="{hovered:hover === article.id}" @mouseover="hover = article.id" @mouseleave="hover = false"
                     @click="$router.push({name:'myPost' , params:{id:article.id}})"
                     />
-                    <!-- with publication time  -->
-                    <!-- :date="article.publicationDate.split('T')[0]  + ' ' + article.publicationDate.split('T')[1].split('.')[0]" -->
+                   
 
                     <div class="button_wrapper">
                         <article-button color="#4ac793" @click="$router.push({name:'editPost' , params:{id:article.id}})">Edit</article-button>
@@ -79,7 +78,10 @@
                 </div>
            </div>
            <div v-else>
-               <h1>No posts created</h1>
+               <h1>No posts created yet</h1>
+                <article-button @click="$router.push('/createPost')" style="background:green">
+                    Create first post
+                </article-button>
            </div>
            
            
@@ -103,7 +105,8 @@ import ArticleCard from '@/components/ArticleCard.vue'
 import ArrowUpIcon from '@/components/Icons/ArrowUp.vue'
 import ArrowDownIcon from '@/components/Icons/ArrowDown.vue'
 import {actionsIds} from '@/store/postModule/actions'
-import {postMutationsIds} from '@/store/postModule/mutations'
+// import {postMutationsIds} from '../store/postModule/mutations'
+import {postMutationsIds} from '../../store/postModule/mutations'
 import CustomSelect from '@/components/UI/CustomSelect.vue'
     export default {
   components: { ArticleCard , ArrowUpIcon ,ArrowDownIcon, CustomSelect },
@@ -130,6 +133,7 @@ import CustomSelect from '@/components/UI/CustomSelect.vue'
                 this.handleFetchMorePosts({ofCurrentUser:true , order:this.orderOption , orderDirection:this.orderDirection})
             },
              changeOrder(){
+              this.setMessage(null)
               this.setPage(0)
               this.fetchPosts({ofCurrentUser:true ,order:this.orderOption})
             },
@@ -154,13 +158,15 @@ import CustomSelect from '@/components/UI/CustomSelect.vue'
                 handleDeletePost:'post/' + actionsIds.DELETE_POST}),
             ...mapMutations({
                 setPage:'post/' + postMutationsIds.SET_PAGE ,
-                setMessage:'post/' + postMutationsIds.SET_MESSAGE
+                setMessage:'post/' + postMutationsIds.SET_MESSAGE ,
+                setPosts:'post/' + postMutationsIds.SET_MY_POSTS
             })
         },
         mounted(){ this.fetchPosts({ofCurrentUser:true}) },
         beforeUnmount(){
             this.setPage(0)
             this.setMessage(null)
+           
             },
         computed:{
             ...mapState({

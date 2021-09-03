@@ -58,7 +58,11 @@ const mutations = {
         state.selectedPost = post
     },
     removePost(state,postId){
-        state.userPosts = state.userPosts.filter(post => post.id !== postId)
+        if(Array.isArray(state.userPosts)){
+            state.userPosts = state.userPosts.filter(post => post.id !== postId)
+        }else{
+            state.userPosts = []
+        }
     },
     setTotalPages(state,total){
         state.totalPages = total

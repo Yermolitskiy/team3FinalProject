@@ -39,6 +39,8 @@
           </div>
         <!-- top navbar right side -->
           <div class="iconbutton_wrapper">
+            <p v-if="isLogged"> Hi , {{name}} ! </p>
+
             <icon-base v-if="isLogged" @click="$router.push('/createPost')" width="30" height="30" icon-name="Add post">
                 <add-icon/>
             </icon-base>
@@ -80,7 +82,8 @@ export default {
   computed:{
     ...mapState({
         isLogged:state => state.auth.isLogged,
-        isNavOpen:state => state.isNavOpen
+        isNavOpen:state => state.isNavOpen,
+        name:state => state.auth.user.name
 
     })
   },
@@ -97,6 +100,7 @@ export default {
             if(this.$store.state.isNavOpen) this.hideNavbar()
             }
       },
+      
     setup(){
             const {type} = useBreakPoints()
             return {type}
@@ -152,7 +156,7 @@ export default {
     margin-right: 3rem;
     display: flex;
     justify-content: space-evenly;
-    width:10rem
+    width:15rem
   }
 
   

@@ -37,7 +37,8 @@
                      <article-card 
                         :body="selectedPost.body" :title="selectedPost.title" 
                         :author="selectedPost.author"
-                        :date="selectedPost.date"
+                        :date="new Date(Date.parse(selectedPost.publicationDate)).toLocaleString()"
+                        
                         :img="selectedPost.postImage" />
                 </div>
                 

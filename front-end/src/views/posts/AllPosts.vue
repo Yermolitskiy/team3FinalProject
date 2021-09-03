@@ -14,7 +14,7 @@
 
         <div  v-if="!loading && $route.name==='AllPosts'">
 
-            <custom-select v-if="Array.isArray(articleData) && articleData">
+            <custom-select v-if="Array.isArray(articleData) && articleData.length">
                   <select @change="changeOrder" v-model="orderOption" name="order" id="order">
                     <option disabled value="">Choose order</option>
                     <option value="publicationDate">Publication Date</option>
@@ -31,7 +31,7 @@
             </custom-select>
  
 
-            <div class="article_list" v-if="Array.isArray(articleData) && articleData">
+            <div class="article_list" v-if="Array.isArray(articleData) && articleData.length">
                 <article-card v-for="article in articleData" 
                 :body="article.body" :title="article.title" 
                 :author="article.author"
@@ -52,7 +52,11 @@
                  />
             </div>
             <div v-else>
-                <h1>No posts yet</h1>
+                <h1>No posts created yet</h1>
+                <article-button v-if="isLogged" @click="$router.push('/createPost')" style="background:green">
+                    Be first who will create a post!
+                </article-button>
+
             </div>
             
         <div v-if="!loading" v-intersection="loadMore" class="observer" ></div>
@@ -120,7 +124,8 @@
         computed:{
             ...mapState({
                 articleData: state => state.post.posts,
-                loading:state => state.post.postsLoading
+                loading:state => state.post.postsLoading,
+                isLogged:state => state.auth.isLogged
             })
         },
         mounted(){

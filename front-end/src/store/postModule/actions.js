@@ -25,8 +25,12 @@ const actions = {
     async fetchPosts({commit , state} , data){
         try {
            
+          
             const ofCurrentUser = data?.ofCurrentUser
             const offset = state.page === 0 ? 0 :  state.page * state.limit
+
+            ofCurrentUser ? commit(postMutationsIds.SET_MY_POSTS , []) : commit(postMutationsIds.SET_POSTS, [])
+
             commit(postMutationsIds.SET_LOADING , true);
             commit(postMutationsIds.SET_PAGE , state.page + 1)
             
@@ -39,13 +43,24 @@ const actions = {
                         order:data?.order,
                         orderDirection:data?.orderDirection
                     }})
-                
-           
-            commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
 
-            ofCurrentUser ? commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , ...response.data.posts])
+            console.log(response)
+                
+           const totalPages =  Math.ceil(response.headers['x-total-count'] / state.limit) ? Math.ceil(response.headers['x-total-count'] / state.limit) : 1
+            commit(postMutationsIds.SET_TOTAL_PAGES , totalPages)
+
+        
+            if(Array.isArray(response.data.posts)){
+                ofCurrentUser ? commit(postMutationsIds.SET_MY_POSTS , [...response.data.posts] )
                                 //fetch for current user
-                              : commit(postMutationsIds.SET_POSTS , [...state.posts , ...response.data.posts])
+                              : commit(postMutationsIds.SET_POSTS , [...response.data.posts])
+            }else{
+                ofCurrentUser ? commit(postMutationsIds.SET_MY_POSTS , {...response.data.posts} )
+                                //fetch for current user
+                              : commit(postMutationsIds.SET_POSTS , {...response.data.posts})
+            }
+
+            
 
             commit(postMutationsIds.SET_POSTS , response.data.posts)
             commit(postMutationsIds.SET_POSTS_META , response.data.meta)
@@ -102,9 +117,10 @@ const actions = {
 
         try {
          
-            console.log(data)
+            
 
             commit(postMutationsIds.SET_ERROR , null)
+            commit(postMutationsIds.SET_MESSAGE , null)
 
             // id is recieved from token payload 
             //turns proxy object into plain js object and returning data property
@@ -116,8 +132,8 @@ const actions = {
             if(!image){
                 delete postData['postImage']
                 // repalce string path in segregate .env later
-                const response = await axios.post('/api/posts/' , {...postData })
-                commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , response.data])
+                 await axios.post('/api/posts/' , {...postData })
+                // commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , response.data])
                 commit(postMutationsIds.SET_MESSAGE , 'Post is successfuly created')
             }
             //send form-data request if image provided

@@ -31,7 +31,7 @@ class PostController {
         try {
             
             const {id} = req.params
-            const {userId} = req.user
+            const {id:userId} = req.user
 
             if(id){
                 const post = await PostRepository.getBy({id , author:userId})
@@ -53,15 +53,17 @@ class PostController {
     async createPost(req,res){
         try {
             const data = req.body
-            const {userId} = req.user
+            const {id} = req.user
+            console.log(req.user)
+            // console.log(userId)
          
             if(req.file){
                 const postImage = `${process.env.API_URL}${process.env.PUBLIC_POSTS_STATIC}${req.file.filename}`
-                const post = await PostRepository.create({...data ,author:userId, postImage })
+                const post = await PostRepository.create({...data ,author:id, postImage })
                 return res.status(201).json(post)
 
             }else{
-                const post = await PostRepository.create({...data,author:userId  })
+                const post = await PostRepository.create({...data,author:id  })
                 return res.status(201).json(post)
             }
             
@@ -87,7 +89,7 @@ class PostController {
     async removePost(req,res){
         try {
             const {id} = req.params
-            const {userId} = req.user
+            const {id : userId} = req.user
             const post = await PostRepository.getBy({id , author:userId})
                 //when not author tries to access specific post
         

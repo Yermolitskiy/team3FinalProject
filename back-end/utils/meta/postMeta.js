@@ -51,13 +51,13 @@ function addPostMeta (req, res, initialPosts) {
 
             res.setHeader('x-total-count' , initialPosts.length)
             //the header that Emils was missing to enable header access on client
-            res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count')
+            res.setHeader('Access-Control-Expose-Headers', 'x-total-count')
             
             
         }else{
             res.setHeader('x-total-count' , initialPosts.length)
             posts = initialPosts
-            res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count')
+            res.setHeader('Access-Control-Expose-Headers', 'x-total-count')
         }
         
         
