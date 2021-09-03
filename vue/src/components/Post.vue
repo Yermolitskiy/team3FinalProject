@@ -1,56 +1,50 @@
 <template>
-  <div v-if="currentPost" class="edit-form">
-    <h4>Post</h4>
+  <form v-if="currentPost" class="edit-form">
+    <h4 class="title1">Post</h4>
     <form>
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" class="form-control" id="title"
+      <div>
+        <input type="text" class="input" id="title"
           v-model="currentPost.title"
         />
       </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <input type="text" class="form-control" id="description"
+      <div>
+        <input type="text" class="text-input" id="description"
           v-model="currentPost.description"
         />
       </div>
 
-      <div class="form-group">
+      <div>
         <label><strong>Status:</strong></label>
         {{ currentPost.published ? "Published" : "Pending" }}
       </div>
     </form>
 
-    <button class="badge badge-primary mr-2"
+    <button class="button-blog"
       v-if="currentPost.published"
       @click="updatePublished(false)"
     >
       UnPublish
     </button>
-    <button v-else class="badge badge-primary mr-2"
+    <button v-else class="button-blog"
       @click="updatePublished(true)"
     >
       Publish
     </button>
 
-    <button class="badge badge-danger mr-2"
+    <button class="button-blog"
       @click="deletePost"
     >
       Delete
     </button>
 
-    <button type="submit" class="badge badge-success"
+    <button type="submit" class="button-blog"
       @click="updatePost"
     >
       Update
     </button>
     <p>{{ message }}</p>
-  </div>
+  </form>
 
-  <div v-else>
-    <br />
-    <p>Please click on a Post...</p>
-  </div>
 </template>
 
 <script>
@@ -126,7 +120,71 @@ export default {
 
 <style>
 .edit-form {
-  max-width: 300px;
   margin: auto;
+  padding: 30px 25px;
+  background: white;
+}
+
+body {
+  width: 100%;
+}
+
+
+h4.title {
+  margin: -28px -25px 25px;
+  padding: 15px 25px;
+  line-height: 30px;
+  font-size: 25px;
+  font-weight: 300;
+  color: #ADADAD;
+  text-align:center;
+  background: #f7f7f7;
+ 
+}
+
+.input {
+  width: 80%;
+  height: 50px;
+  margin-bottom: 25px;
+  padding-left:10px;
+  font-size: 15px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.text-input {
+  width: 80%;
+  height: 500px;
+  margin-bottom: 25px;
+  padding-left:10px;
+  font-size: 15px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.input:focus {
+    border-color:#6e8095;
+    outline: none;
+  }
+.text-input:focus {
+    border-color:#6e8095;
+    outline: none;
+  }
+.button-blog {
+  width: 10%;
+  height: 50px;
+  padding: 0;
+  font-size: 20px;
+  color: #fff;
+  text-align: center;
+  background: #f0776c;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer; 
+  outline: 0;
+  margin-bottom: 5;
+  margin-top: 5;
+  margin-right: 5px;
+  margin-left: 5;
 }
 </style>

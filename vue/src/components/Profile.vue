@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <header class="jumbotron">
+  <div class="card">
+    <header>
       <h3>
         <strong>{{currentUser.username}}</strong> Profile
       </h3>
@@ -41,7 +41,5 @@ export default {
 };
 </script>
 <style scoped>
-li {
-    background: floralwhite;
-}
+
 </style>

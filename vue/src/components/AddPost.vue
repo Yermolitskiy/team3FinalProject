@@ -1,6 +1,7 @@
 <template>
-  <div class="submit-form">
+  <form class="edit-form">
     <div v-if="!submitted">
+<<<<<<< HEAD
 
         <Form>
 
@@ -52,12 +53,40 @@
     
 
 
+=======
+      <div>
+        
+        <input
+          placeholder="title"
+          type="text"
+          class="input"
+          id="title"
+          required
+          v-model="post.title"
+          name="title"
+        />
+      </div>
+
+      <div>
+        <input
+          placeholder="description"
+          class="text-input"
+          id="description"
+          required
+          v-model="post.description"
+          name="description"
+        />
+      </div>
+
+      <button @click="savePost" class="button-blog">Submit</button>
+    </div>
+>>>>>>> origin/0077
 
     <div v-else>
       <h4>You submitted successfully!</h4>
-      <button class="btn btn-success" @click="newPost">Add</button>
+      <button class="button-blog" @click="newPost">Add</button>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
@@ -135,5 +164,76 @@ export default {
 </script>
 
 <style>
+<<<<<<< HEAD
 
+=======
+.edit-form {
+  margin: auto;
+  padding: 30px 25px;
+  background: white;
+}
+
+body {
+  width: 100%;
+}
+
+
+h4.title {
+  margin: -28px -25px 25px;
+  padding: 15px 25px;
+  line-height: 30px;
+  font-size: 25px;
+  font-weight: 300;
+  color: #ADADAD;
+  text-align:center;
+  background: #f7f7f7;
+ 
+}
+
+.input {
+  width: 80%;
+  height: 50px;
+  margin-bottom: 25px;
+  padding-left:10px;
+  font-size: 15px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.text-input {
+  width: 80%;
+  height: 500px;
+  margin-bottom: 25px;
+  padding-left:10px;
+  font-size: 15px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.input:focus {
+    border-color:#6e8095;
+    outline: none;
+  }
+.text-input:focus {
+    border-color:#6e8095;
+    outline: none;
+  }
+.button-blog {
+  width: 10%;
+  height: 50px;
+  padding: 0;
+  font-size: 20px;
+  color: #fff;
+  text-align: center;
+  background: #f0776c;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer; 
+  outline: 0;
+  margin-bottom: 5;
+  margin-top: 5;
+  margin-right: 5px;
+  margin-left: 5;
+}
+>>>>>>> origin/0077
 </style>
