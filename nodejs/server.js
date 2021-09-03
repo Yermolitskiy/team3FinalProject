@@ -11,7 +11,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 //folder where will be stored publically available post images and maybe any other static files
-app.use('/public',express.static(resolve(__dirname , '../app/public')))
+app.use('/public',express.static(resolve(__dirname , './app/public')))
 
 
 // parse requests of content-type - application/json

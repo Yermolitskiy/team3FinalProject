@@ -1,3 +1,4 @@
 nodejs/app/config/auth.config.js
 nodejs/app/config/db.config.js
 nodejs/node_modules
+nodejs/public/uploads

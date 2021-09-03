@@ -8,7 +8,7 @@
           @click="setActivePost(post, index)"
       >
       <div class="card">
-        <router-link :to="'/posts/' + post.id"><img class="card-img-top-list" src="https://lh3.googleusercontent.com/d/1RlTfZ1wVgMsgSN3b8L1bFameHjYxFDfz=s800?authuser=0" alt="image" style="width:100%"></router-link>
+        <router-link :to="'/posts/' + post.id"><img class="card-img-top-list" :src='post.imageUrl ? post.imageUrl : "https://lh3.googleusercontent.com/d/1RlTfZ1wVgMsgSN3b8L1bFameHjYxFDfz=s800?authuser=0"' alt="image" style="width:100%"></router-link>
         
         <div class="container">
           <h4><b>{{ post.title }}</b></h4>
