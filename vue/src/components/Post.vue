@@ -1,11 +1,13 @@
 <template>
   <form v-if="currentPost" class="edit-form">
     <h4 class="title1">Post</h4>
+    
     <form>
       <div>
         <input type="text" class="input" id="title"
           v-model="currentPost.title"
         />
+        
       </div>
       <div>
         <input type="text" class="text-input" id="description"
