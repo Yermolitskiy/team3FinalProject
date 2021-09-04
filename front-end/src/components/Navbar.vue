@@ -45,7 +45,7 @@
                 <add-icon/>
             </icon-base>
 
-            <icon-base  width="30"  height="30" icon-name="User" @click="toggleUserDropdown" :style="!isLogged ? 'margin-left:3rem;':''" > 
+            <icon-base  width="30"  height="30" icon-name="User" @click="toggleUserDropdown" :style="!isLogged ? 'margin-left:10rem;':''" > 
               <user-icon />
             </icon-base>
             <!-- drop down menu -->

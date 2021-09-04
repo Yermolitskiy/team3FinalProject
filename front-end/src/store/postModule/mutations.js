@@ -50,9 +50,12 @@ const mutations = {
     //                 {...state.posts.find(post => post.id === id) , title:data.title , body:data.body}
     // },
     changeUserPost(state,{data,id}){
-        
-        state.userPosts[state.userPosts.findIndex(post => post.id === id)] = 
-                    {...state.userPosts.find(post => post.id === id) , title:data.title , body:data.body}
+        if(Array.isArray(state.userPosts)){
+            state.userPosts[state.userPosts.findIndex(post => post.id === id)] = 
+                        {...state.userPosts.find(post => post.id === id) , title:data.title , body:data.body}
+        }else{
+            state.userPosts = {...state.userPosts , title:data.title , body:data.body }
+        }
     },
     selectPost(state , post){
         state.selectedPost = post

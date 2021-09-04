@@ -5,7 +5,7 @@
     <div v-if="loading">
       <loader/>
     </div>
-    <div class="card_container" :style="gridStyle" v-if="!loading && Array.isArray(postsData) && postsData.length">
+    <div class="card_container" :class="{align_even:postsData.length === 2 , align_center:postsData.length === 1}" :style="gridStyle" v-if="!loading && Array.isArray(postsData) && postsData.length">
       <post-card v-for="post in postsData"
         :img="post.postImage" 
         :class="{hovered:hover === post.id}" @mouseover="hover = post.id" @mouseleave="hover = false"
@@ -116,6 +116,17 @@ export default {
       margin: 100px 12.5% 0 12.5%;
       display: grid;
   }
+
+.align_center{
+  display: flex;
+  justify-content: center;
+}
+
+.align_even{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
 
 
 

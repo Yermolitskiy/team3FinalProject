@@ -54,8 +54,6 @@ class PostController {
         try {
             const data = req.body
             const {id} = req.user
-            console.log(req.user)
-            // console.log(userId)
          
             if(req.file){
                 const postImage = `${process.env.API_URL}${process.env.PUBLIC_POSTS_STATIC}${req.file.filename}`

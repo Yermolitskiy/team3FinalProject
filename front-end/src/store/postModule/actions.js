@@ -44,21 +44,20 @@ const actions = {
                         orderDirection:data?.orderDirection
                     }})
 
-            console.log(response)
                 
-           const totalPages =  Math.ceil(response.headers['x-total-count'] / state.limit) ? Math.ceil(response.headers['x-total-count'] / state.limit) : 1
+            const totalPages =  Math.ceil(response.headers['x-total-count'] / state.limit) ? Math.ceil(response.headers['x-total-count'] / state.limit) : 1
             commit(postMutationsIds.SET_TOTAL_PAGES , totalPages)
 
         
-            if(Array.isArray(response.data.posts)){
+            if(Array.isArray(response.data.posts))
                 ofCurrentUser ? commit(postMutationsIds.SET_MY_POSTS , [...response.data.posts] )
                                 //fetch for current user
                               : commit(postMutationsIds.SET_POSTS , [...response.data.posts])
-            }else{
+            else
                 ofCurrentUser ? commit(postMutationsIds.SET_MY_POSTS , {...response.data.posts} )
                                 //fetch for current user
                               : commit(postMutationsIds.SET_POSTS , {...response.data.posts})
-            }
+            
 
             
 
@@ -86,15 +85,18 @@ const actions = {
                 
                 commit(postMutationsIds.SET_PAGE , state.page + 1)
 
-                const response = await axios.get(`/api/posts${ofCurrentUser ? 'userPosts' : ''}` , {
+                const response = await axios.get(`/api/posts${ofCurrentUser ? '/userPosts' : ''}` , {
                     params:{
                         offset , limit:state.limit ,
                         order:data?.order,
                         orderDirection:data?.orderDirection
                     }
                 })
+
+                const totalPages =  Math.ceil(response.headers['x-total-count'] / state.limit) ? Math.ceil(response.headers['x-total-count'] / state.limit) : 2
+
         
-                commit(postMutationsIds.SET_TOTAL_PAGES , Math.ceil(response.headers['x-total-count'] / state.limit))
+                commit(postMutationsIds.SET_TOTAL_PAGES , totalPages)
 
                 ofCurrentUser ? commit(postMutationsIds.SET_MY_POSTS , [...state.userPosts , ...response.data.posts])
                               : commit(postMutationsIds.SET_POSTS , [...state.posts , ...response.data.posts])

@@ -19,7 +19,6 @@ class AuthController {
             //req.body = {email , name , surname , age , password}
             const userData = await UserService.register(req.body)
             res.cookie('refreshToken' , userData.refreshToken , {maxAge: 30 * 24 * 60 * 60 * 1000 , httpOnly:true , domain: 'localhost', path: '/'})
-            console.log('user data to return register controller method =>' , userData)
             return res.status(200).json(userData)
         } catch (error) {
             console.log(error)
@@ -57,7 +56,6 @@ class AuthController {
 
     async refresh(req,res){
         try {
-            console.log('refresh triggered')
             const {refreshToken} = req.cookies
             const userData = await UserService.refresh(refreshToken)
             res.cookie('refreshToken' , userData.refreshToken , {maxAge: 30 * 24 * 60 * 60 * 1000 , httpOnly:true})

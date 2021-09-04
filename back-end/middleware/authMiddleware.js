@@ -8,11 +8,11 @@ module.exports = function (req , res , next){
     try {
         const authorizationHeader = req.headers.authorization
 
-        if(!authorizationHeader) throw new Error('Unauthorized error')
+        if(!authorizationHeader) return res.status(401).json({message:'Unauthorized error'})
 
         const token = authorizationHeader.split(' ')[1]
 
-        if(!token) throw new Error('Unauthorized error')
+        if(!token) return res.status(401).json({message:'Unauthorized error'})
         
         const userId = TokenService.validateAccessToken(token)
 
@@ -23,6 +23,6 @@ module.exports = function (req , res , next){
         next()
     } catch (error) {
         
-         throw new Error('Unauthorized error')
+        return res.status(401).json({message:'Unauthorized error'})
     }
 }
