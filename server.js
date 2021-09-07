@@ -28,7 +28,13 @@ db.sequelize.sync();
 //     console.log("Drop and re-sync db.");
 //     initial();
 //   });
+  // handle production: 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(__dirname + '/public/'));
 
+  // Handle SPA:
+  app.get('/.*/', (req, res) => {res.sendFile(__dirname + '/public/index.html'))};
+}
 
 // simple route
 app.get("/", (req, res) => {
