@@ -5,3 +5,4 @@ nodejs/public/uploads
 nodejs/vue/node_modules
 nodejs/vue/vue.config.js
 /vue
+nodejs/.env
