@@ -7,7 +7,7 @@ const Sequelize = require("sequelize");
 // if (process.env.JAWSDB_URL) {
 //   sequelize = new Sequelize(process.env.JAWSDB_URL);
 // } else {
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, dbConfig.PORT, {
+const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
   operatorsAliases: false,
