@@ -1,8 +1,8 @@
 # nodejs/app/config/auth.config.js
 # nodejs/app/config/db.config.js
-nodejs/node_modules
-nodejs/vue/node_modules
+/node_modules
+/vue/node_modules
 # nodejs/vue/vue.config.js
-# /vue
-# nodejs/.env
+/vue
+/.env
 # nodejs/app/public/uploads/posts
