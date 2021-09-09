@@ -53,7 +53,7 @@ exports.create = (req, res) => {
       title: req.body.title,
       description: req.body.description,
       published: req.body.published ? req.body.published : false,
-      imageUrl: req.file ? `http://https://nodevueacc.herokuapp.com:2502/public/uploads/posts/${req.file.filename}` : false,//`http://localhost:8080/public/uploads/posts/${req.file.filename}` : false, //frwahxxknm9kwy6c.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306
+      imageUrl: req.file ? `http://https://nodevueacc.herokuapp.com/public/uploads/posts/${req.file.filename}` : false,//`http://localhost:8080/public/uploads/posts/${req.file.filename}` : false, //frwahxxknm9kwy6c.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306
       // imageUrl: req.body.file ? `${process.env.API_URL}${process.env.PUBLIC_POSTS_STATIC}${req.file.filename}`,
     };
   
