@@ -4,5 +4,5 @@ nodejs/node_modules
 nodejs/vue/node_modules
 # nodejs/vue/vue.config.js
 # /vue
-nodejs/.env
+# nodejs/.env
 # nodejs/app/public/uploads/posts
