@@ -53,8 +53,8 @@ exports.create = (req, res) => {
       title: req.body.title,
       description: req.body.description,
       published: req.body.published ? req.body.published : false,
-      // imageUrl: req.file ? `http://localhost:8080/public/uploads/posts/${req.file.filename}` : false,
-      imageUrl: req.body.file ? `${process.env.API_URL}${process.env.PUBLIC_POSTS_STATIC}${req.file.filename}`,
+      imageUrl: req.file ? `http://localhost:8080/public/uploads/posts/${req.file.filename}` : false,
+      // imageUrl: req.body.file ? `${process.env.API_URL}${process.env.PUBLIC_POSTS_STATIC}${req.file.filename}`,
 
       
     };
