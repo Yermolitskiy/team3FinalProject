@@ -22,12 +22,12 @@ app.use(express.urlencoded({ extended: true }));
 
 const db = require("./app/models");
 const Role = db.role;
-db.sequelize.sync();
+// db.sequelize.sync();
 //for the development mode:
-// db.sequelize.sync({ force: true }).then(() => {
-//     console.log("Drop and re-sync db.");
-//     initial();
-//   });
+db.sequelize.sync({ force: true }).then(() => {
+    console.log("Drop and re-sync db.");
+    initial();
+  });
   // handle production: 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(__dirname + '/public/'));
