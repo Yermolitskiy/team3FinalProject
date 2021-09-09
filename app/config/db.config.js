@@ -1,4 +1,5 @@
 module.exports = {
+  production: {
     HOST: "frwahxxknm9kwy6c.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     USER: "t1q3vjb0lto07koo",
     PASSWORD: "s4huvkmdne1kunn9",
@@ -10,4 +11,5 @@ module.exports = {
       acquire: 30000,
       idle: 10000
     }
-  };
+  }
+};
