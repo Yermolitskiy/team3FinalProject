@@ -8,8 +8,8 @@ const app = express();
 app.use(history());
 
 var corsOptions = {
-  // origin: "http://localhost:8081"
-  origin: "https://nodevueacc.herokuapp.com"
+  origin: "http://localhost:8081"
+  // origin: "https://nodevueacc.herokuapp.com"
 };
 
 app.use(cors(corsOptions));
