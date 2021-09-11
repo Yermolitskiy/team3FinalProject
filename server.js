@@ -2,12 +2,14 @@ const express = require("express");
 const cors = require("cors");
 const {resolve} = require('path')
 
+const history = require('connect-history-api-fallback');
+
 const app = express();
-// app.use(history());
+app.use(history());
 
 var corsOptions = {
-  origin: "http://localhost:8081"
-  // origin: "https://nodevueacc.herokuapp.com"
+  // origin: "http://localhost:8081"
+  origin: "https://nodevueacc.herokuapp.com"
 };
 
 app.use(cors(corsOptions));
