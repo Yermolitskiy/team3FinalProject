@@ -49,6 +49,6 @@ db.user.hasOne(db.refreshToken, {
 
 db.ROLES = ["user", "admin", "moderator"];
 
-db.posts = require("./post.model.js")(sequelize, Sequelize);
+db.posts = require("./post.model.js").default(sequelize, Sequelize);
 
 module.exports = db;
