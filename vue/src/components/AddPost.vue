@@ -115,7 +115,7 @@ export default {
           this.submitted = true;
         })
         .catch(e => {
-          console.log(e);
+          console.log(e.response.data);
         });
     },
     
