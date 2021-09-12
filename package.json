@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "\"Node.js Rest Apis with Express, Sequelize & MySQL\",",
   "main": "server.js",
+  "node": "16.6.1",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "heroku-postbuild": "cd vue && ./build.sh"
