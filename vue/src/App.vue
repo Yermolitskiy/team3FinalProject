@@ -3,9 +3,15 @@
     <div class="navb">
       <ul>
         <div>
+          <div>
           <li><router-link to="/home" id="nl"><font-awesome-icon icon="home" /></router-link></li>
+          </div>
+          <div>
           <li><router-link v-if="currentUser" to="/posts" id="nl">Posts</router-link></li>
+          </div>
+          <div>
           <li><router-link v-if="currentUser" to="/add" id="nl">Add</router-link></li>
+          </div>
           <!-- <li><router-link to="/home" id="nl">Home</router-link></li> -->
           <!-- <li><a  id="nl" href="/">Blog</a></li> -->
           <!-- <li><router-link id="nl" to="/home">Home</router-link></li> -->
