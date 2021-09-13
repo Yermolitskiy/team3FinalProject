@@ -3,6 +3,6 @@
 /node_modules
 /vue/node_modules
 # nodejs/vue/vue.config.js
-/vue
+# /vue
 /.env
 # nodejs/app/public/uploads/posts

@@ -5,6 +5,15 @@ const {resolve} = require('path')
 const history = require('connect-history-api-fallback');
 
 const app = express();
+
+app.all('*', function(req, res, next) {
+  var origin = req.get('origin'); 
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 app.use(history());
 
 var corsOptions = {
@@ -36,13 +45,13 @@ db.sequelize.sync({ force: true }).then(() => {
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(__dirname + '/public/'));
   // Handle SPA:
-  // app.get('/.*/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
+  app.get('/.*/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
 }
 
 // simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Blog application." });
-});
+// app.get("/", (req, res) => {
+//   res.json({ message: "Welcome to Blog application." });
+// });
 
 require("./app/routes/post.routes")(app);
 require('./app/routes/auth.routes')(app);

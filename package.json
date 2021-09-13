@@ -19,6 +19,7 @@
   "author": "Yermolitskiy",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.4",
     "bcryptjs": "^2.4.3",
     "connect-history-api-fallback": "^1.6.0",
     "cors": "^2.8.5",

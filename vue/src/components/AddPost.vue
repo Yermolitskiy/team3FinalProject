@@ -29,7 +29,7 @@
               <textarea name="description" required v-model="post.description" id="description" cols="30" rows="10"></textarea>
           </template>
           <template #button1>
-            <button @click="savePost" class="success_btn">Submit</button>
+            <button @click="savePost" class="btn-success_btn">Submit</button>
           </template>
 
           <template #button2>
@@ -106,8 +106,6 @@ export default {
         };
       }
 
-     
-
       PostDataService.create(data)
         .then(response => {
           this.post.id = response.data.id;
@@ -115,7 +113,7 @@ export default {
           this.submitted = true;
         })
         .catch(e => {
-          console.log(e.response.data);
+          console.log(e);
         });
     },
     
